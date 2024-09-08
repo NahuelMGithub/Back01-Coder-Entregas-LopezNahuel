@@ -20,3 +20,6 @@ app.use(express.urlencoded({extended : true}));
 //Implementar los routers 
 app.use('/api/products', productRouter);
 app.use('/api/cart', cartRouter);
+
+
+
