@@ -15,8 +15,8 @@ router.get('/', (req, res)=>{
 
 // aca hago el get par obtener un producto por su id
 
-router.get('/:id', (req, res)=>{
-    const prodId = req.params.id
+router.get('/:pid', (req, res)=>{
+    const prodId = req.params.pid
     const producto = products.find(producto => producto.id === prodId); 
     if (!producto) { 
         return res.status(404).send({ status: "error", error: "Product not found" });
@@ -58,8 +58,8 @@ router.post('/', (req, res) =>{
 
 // PUT
 
-router.put( '/:id' , (req, res) => {
-    const productoBuscado = req.params.id;
+router.put( '/:pid' , (req, res) => {
+    const productoBuscado = req.params.pid;
     const {title,  description, code, price, status, stock, category, thumbnails, } = req.body;
 
     const productoIndex = products.findIndex(producto => producto.id === productoBuscado)
@@ -101,8 +101,8 @@ router.put( '/:id' , (req, res) => {
 //DELETE La ruta DELETE /:pid deberá eliminar el producto con el pid indicado. 
 
 
-router.delete( '/:id' , (req, res) => {
-    const productoIdAEliminar = req.params.id;
+router.delete( '/:pid' , (req, res) => {
+    const productoIdAEliminar = req.params.pid;
     const productoIndex = products.findIndex(producto => producto.id === productoIdAEliminar);
 
     if(productoIndex === -1){

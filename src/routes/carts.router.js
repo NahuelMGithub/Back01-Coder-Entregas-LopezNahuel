@@ -1,34 +1,91 @@
 import { Router } from "express";
+import {v4 as uuidv4 } from 'uuid';
 
 const router = Router();
 
+let carts = [];
+
+//----- ruta POST
+
+router.post('/', (req, res) =>{
+    const {products } = req.body;
+
+   //validar producto
+
+    if(!products ){
+       return res.status(400).json({ error : 'Datos inválidos'});
+   }
+ 
+    // creo el producto y lo agrego a la lista
+
+    const newCart = {
+           id: uuidv4(), 
+           products
+    }
+
+    carts.push(newCart);
+    res.status(201).json(newCart);
+})
+
+router.get('/:cid', (req, res)=>{
+    const carritoID = req.params.cid
+    const carritoBuscado = carts.find(carrito => carrito.id === carritoID); 
+    if (!carritoBuscado) { 
+        return res.status(404).send({ status: "error", error: "Cart not found" });
+     } 
+     res.send(carritoBuscado);
+
+})
 
 
 /*
-Para el carrito, el cual tendrá su router en /api/carts/, configurar dos rutas:
-La ruta raíz POST / deberá crear un nuevo carrito con la siguiente estructura:
-Id:Number/String (A tu elección, de igual manera como con los productos, debes asegurar que nunca se dupliquen
-los ids y que este se autogenere).
-products: Array que contendrá objetos que representen cada producto
 
------------------
-
-La ruta GET /:cid deberá listar los productos que pertenezcan al carrito con el parámetro cid proporcionados.
-La ruta POST  /:cid/product/:pid deberá agregar el producto al arreglo “products” del carrito seleccionado, 
-agregándose como un objeto bajo el siguiente formato:
-product: SÓLO DEBE CONTENER EL ID DEL PRODUCTO (Es crucial que no agregues el producto completo)
-quantity: debe contener el número de ejemplares de dicho producto. El producto, de momento, se agregará de uno en uno.
-
-Además, si un producto ya existente intenta agregarse al producto, incrementar el campo quantity de dicho producto. 
-
-
+1)  busco el carrito por id
+si no existe genero error
+si existe, busco producto. 
+ si NO existe, agrego el id  y pongo quantity 1
+ si existe, mantengo id y quantity=+1
+ retorno el    carrito
 
 */
 
-let cart = [];
 
-router.get('/', (res, req)=>{
-    res.json(cart) 
+router.post('/:cid/product/:pid', (req, res) =>{
+    const carritoBuscado = req.params.cid;
+    const productoBuscado = req.params.pid;
+
+    // Buscar el carrito por su ID
+    const carritoIndex = carts.findIndex(carrito => carrito.id === carritoBuscado);
+
+    // Si el carrito no se encuentra, retornar error 404
+    if (carritoIndex === -1) {
+        return res.status(404).json({ error: 'Carrito no encontrado' });
+    }
+
+    // Obtener el carrito actual
+    const carritoActual = carts[carritoIndex];
+
+    // Buscar si el producto ya está en el carrito
+    const productoEnCarrito = carritoActual.products.find(prod => prod.product === productoBuscado); // no estoy seguro si es prod.product o .id
+
+    if (productoEnCarrito) {
+        // Si el producto ya está en el carrito, incrementar su cantidad
+        productoEnCarrito.quantity += 1;
+    } else {
+        // Si el producto no está, agregarlo con cantidad 1
+        carritoActual.products.push({
+            product: productoBuscado,
+            quantity: 1
+        });
+    }
+
+    // Actualizar el carrito en la lista de carritos
+    carts[carritoIndex] = carritoActual;
+
+    
+
+    // Devuelve el carrito actualizado
+    res.json(carritoActual);
 })
 
 export default router;

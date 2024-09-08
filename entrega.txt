@@ -1,5 +1,5 @@
 Se debe entregar
-
+ 
 Desarrollar el servidor basado en Node.JS y express,  
 que escuche en el puerto 8080 y disponga de dos grupos de rutas: /products y /carts> ------------------List
 Dichos endpoints estarán implementados con el router de express, con las siguientes especificaciones:
@@ -28,6 +28,8 @@ Todos los campos son obligatorios, a excepción de thumbnails
 La ruta PUT /:pid deberá tomar un producto y actualizarlo por los campos enviados desde body. NUNCA se debe actualizar 
 o eliminar el id al momento de hacer dicha actualización.
 La ruta DELETE /:pid deberá eliminar el producto con el pid indicado. 
+
+
 
 Para el carrito, el cual tendrá su router en /api/carts/, configurar dos rutas:
 La ruta raíz POST / deberá crear un nuevo carrito con la siguiente estructura:
