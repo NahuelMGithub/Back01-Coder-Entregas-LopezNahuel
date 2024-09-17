@@ -1,7 +1,0 @@
-Me quedaron dos dudas sobre el ejercicio:
-
-Sobre el post producto específico en un carrito. Respecto al resto de los productos,
-debo modificarlos de forma que solo digan su id y quantity? Entiendo que no, y es solo para agregar productos, pero me quedó esa duda.
-
-La ruta raíz GET / deberá listar todos los productos de la base. (Incluyendo la limitación ?limit del desafío anterior)
-Realmente no se a que se refiere con eso. 
