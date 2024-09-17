@@ -1,0 +1,16 @@
+{{!-- Esta es mi motor de plantilla --}}
+<h1>Bienvenido al chat de productos</h1>
+<h2>Hola <samp id="username"></samp>  queremos escuchar tu opinion</h2>
+<div>
+    <input id="chatbox">
+</div>
+<div>
+    <p id="messageLogs"></p>
+</div>
+
+<div>
+    <button id="opinar">Dar mi opinion</button>
+</div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> {{!-- sweetalert2 --}}
+<script src="/socket.io/socket.io.js"></script> {{!-- esto es del lado del cliente --}}
+<script src="/js/index.js"></script>
