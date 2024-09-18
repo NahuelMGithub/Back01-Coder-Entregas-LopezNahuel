@@ -1,71 +1,127 @@
 import { Router } from "express";
-import {v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
+
+import ProductsManager from "./ProductsManager.js";
+
 
 const router = Router();
-
+const productsManager = new ProductsManager();
 // Obtener todos los productos
 
 let products = [];
 
 
 //  aca hice un get simple, para trabajarlo bien, mirar 7 y after
-router.get('/', (req, res)=>{
+/* router.get('/', (req, res)=>{
     res.json(products) 
+}) */
+
+//Obtengo  Products con  limit
+router.get('/', async (req, res) => {
+    try {
+        const productos = await productsManager.leerProducto();
+        if (productos.lenght === 0) {
+            return res.status(200).json({ message: "No hay productos disponibles" });
+        }
+        //obtiene el valor del parametro limit de la consulta
+        const limit = parseInt(req.query.limi)
+        const productosLimitados = limit && !isNaN(limit) ? productos.slice(0, limit) : productos;
+        res.status(200).json(productosLimitados)
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send({ status: 'error', error: "Error al obtener productos" });
+    }
 })
 
 // aca hago el get par obtener un producto por su id
-
-router.get('/:pid', (req, res)=>{
+router.get('/:pid', (req, res) => {
     const prodId = req.params.pid
-    const producto = products.find(producto => producto.id === prodId); 
-    if (!producto) { 
+    const producto = products.find(producto => producto.id === prodId);
+    if (!producto) {
         return res.status(404).send({ status: "error", error: "Product not found" });
-     } 
-     res.send(producto);
+    }
+    res.send(producto);
 })
 
 // POST
 
-router.post('/', (req, res) =>{
-     const {title,  description, code, price, status=true, stock, category, thumbnails, } = req.body;
+router.post('/', async (req, res) => {
+   try{
+    const { title, description, code, price, status = true, stock, category, thumbnails, } = req.body;
 
     //validar producto
-
-     if(!title || !description || !code || !price || !stock || !category  ){
-        return res.status(400).json({ error : 'Datos inválidos'});
+    if (!title || !description || !code || !price || !stock || !category) {
+        return res.status(400).json({ error: 'Datos inválidos' });
     }
+    // creo el producto y lo agrego a la lista
+
+    await productsManager.crearProducto( {
+        id: uuidv4(),
+        title,
+        description,
+        code,
+        price,
+        status,
+        stock,
+        category,
+        thumbnails
+    })
+    res.status(201).send({status: "success", message: "Producto creado"});
    
-     // creo el producto y lo agrego a la lista
-
-     const newProduct = {
-            id: uuidv4(), // puse +1, porque es raro que su id sea cero. Otra opcion
-            title,
-            description,
-            code,
-            price,
-            status,
-            stock,
-            category,
-            thumbnails
-
-     }
-
-     products.push(newProduct);
-     res.status(201).json(newProduct);
-
+   }
+   catch(error){
+    console.log(error);
+        res.status(500).send({ status: 'error', error: "Error al crear producto" });
+   }
 
 })
 
+///////////////// post viejo
+
+/*
+router.post('/', (req, res) => {
+    const { title, description, code, price, status = true, stock, category, thumbnails, } = req.body;
+
+    //validar producto
+
+    if (!title || !description || !code || !price || !stock || !category) {
+        return res.status(400).json({ error: 'Datos inválidos' });
+    }
+
+    // creo el producto y lo agrego a la lista
+
+    const newProduct = {
+        id: uuidv4(), // puse +1, porque es raro que su id sea cero. Otra opcion
+        title,
+        description,
+        code,
+        price,
+        status,
+        stock,
+        category,
+        thumbnails
+
+    }
+
+    products.push(newProduct);
+    res.status(201).json(newProduct);
+
+
+})
+*/
+
+
 // PUT
 
-router.put( '/:pid' , (req, res) => {
+router.put('/:pid', (req, res) => {
     const productoBuscado = req.params.pid;
-    const {title,  description, code, price, status, stock, category, thumbnails, } = req.body;
+    const { title, description, code, price, status, stock, category, thumbnails, } = req.body;
 
     const productoIndex = products.findIndex(producto => producto.id === productoBuscado)
 
-    if (productoIndex === -1){
-        return res.status(404).json({error: 'Producto no encontrada'})
+    if (productoIndex === -1) {
+        return res.status(404).json({ error: 'Producto no encontrada' })
     }
 
 
@@ -94,23 +150,23 @@ router.put( '/:pid' , (req, res) => {
     // Enviar la respuesta con el producto actualizado
     res.json(productoActualizado);
 
-}) 
+})
 
 
 
 //DELETE La ruta DELETE /:pid deberá eliminar el producto con el pid indicado. 
 
 
-router.delete( '/:pid' , (req, res) => {
+router.delete('/:pid', (req, res) => {
     const productoIdAEliminar = req.params.pid;
     const productoIndex = products.findIndex(producto => producto.id === productoIdAEliminar);
 
-    if(productoIndex === -1){
-        return res.status(404).json({error: 'Producto no encontrada'});
+    if (productoIndex === -1) {
+        return res.status(404).json({ error: 'Producto no encontrada' });
     }
 
     products.splice(productoIndex, 1);
-    res.status(204).json({mensaje: 'Producto eliminado'})
+    res.status(204).json({ mensaje: 'Producto eliminado' })
 })
 
 export default router;
