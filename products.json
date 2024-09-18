@@ -1,0 +1,46 @@
+[
+  {
+    "id": "55fd8562-1979-40ef-9979-69c0b8e5a28d",
+    "title": "Agua",
+    "description": "Es una botella de agua",
+    "code": "botella",
+    "price": 1050,
+    "status": true,
+    "stock": 1450,
+    "category": "Bebida",
+    "thumbnails": ""
+  },
+  {
+    "id": "d9768e2a-cf4d-4ff6-ad7a-b048f06f6a42",
+    "title": "Agua",
+    "description": "Es una botella de agua",
+    "code": "botella",
+    "price": 1050,
+    "status": true,
+    "stock": 1450,
+    "category": "Bebida",
+    "thumbnails": ""
+  },
+  {
+    "id": "7a0575fd-766b-4522-add6-610169d8b425",
+    "title": "Agua",
+    "description": "Es una botella de agua",
+    "code": "botella",
+    "price": 1050,
+    "status": true,
+    "stock": 1450,
+    "category": "Bebida",
+    "thumbnails": ""
+  },
+  {
+    "id": "146cd9b2-85fc-4052-ae77-6c869abf4d96",
+    "title": "Coca",
+    "description": "Es una botella de coca cola",
+    "code": "botella",
+    "price": 1050,
+    "status": true,
+    "stock": 1500,
+    "category": "Bebida",
+    "thumbnails": ""
+  }
+]

@@ -130,16 +130,17 @@ router.put('/:pid', (req, res) => {
 //DELETE La ruta DELETE /:pid deberá eliminar el producto con el pid indicado. 
 
 
-router.delete('/:pid', (req, res) => {
-    const productoIdAEliminar = req.params.pid;
-    const productoIndex = products.findIndex(producto => producto.id === productoIdAEliminar);
-
-    if (productoIndex === -1) {
-        return res.status(404).json({ error: 'Producto no encontrada' });
-    }
-
-    products.splice(productoIndex, 1);
+router.delete('/:pid',  async (req, res) => {
+    try{
+     const productoIdAEliminar = req.params.pid;
+      await productsManager.eliminarProducto(productoIdAEliminar)
     res.status(204).json({ mensaje: 'Producto eliminado' })
+    }   
+     catch(error){
+        console.log(error);
+        res.status(500).send({ status: 'error', error: "Error al eliminar producto buscado" });
+    }
+    
 })
 
 export default router;

@@ -29,6 +29,27 @@ class ProductsManager {
         }
     }
   }
+
+  async eliminarProducto(idProducto){
+    try{
+      let productos = await this.leerProducto();
+      const productoIndex = productos.findIndex(producto => producto.id === idProducto);
+      if (productoIndex === -1) {
+        console.error('El producto no existe', error);
+        throw error;
+    }
+    // Eliminar el producto del array
+    productos.splice(productoIndex, 1);
+
+    // Guardar los productos actualizados en el archivo
+    await fs.writeFile(this.filePath, JSON.stringify(productos, null, 2));
+    console.log('Producto eliminado exitosamente!');
+
+    }
+    catch (error) {
+      console.error('Error al eliminar producto:', error);
+    }
+  }
 }
 
 export default ProductsManager

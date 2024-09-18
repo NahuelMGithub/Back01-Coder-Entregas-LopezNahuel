@@ -17,13 +17,13 @@ import { Server } from 'socket.io';
 
 // esta constante la uso para ambas entregas, así que la dejo arriba
 const app = express();
- 
-app.use(express.static('public'));
+app.use(express.static(__dirname+ '/public'));
+
 //--------------------------------------------------------------------------------------------------
 //------------------------------------------ preentrega 1
 //--------------------------------------------------------
 
-/*
+
 //Inicializar el servidor
 app.listen(8080, () => {
     console.log("El servidor se encuentra escuchando, tal como era hasta la preentrega 01");
@@ -36,13 +36,13 @@ app.use(express.urlencoded({extended : true}));
 //Implementar los routers 
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
-*/
+
 
 //--------------------------------------------------------
 //------------------------------------------ lo anterior era de preentrega 1
 //---------------------------------------------------------------------------------------------------------
 
-
+/*
 //-------- vamos a crear un servidor http para que tenga donde vivir el servidor socket
 const httpServer = app.listen(8080, ()=>{
     console.log("El servidor se encuentra en el puerto 8080");
@@ -87,4 +87,4 @@ socket.on('userAuthenticated', user =>{
     socket.broadcast.emit('newUserConected', user);
 })
 
-}) 
+}) */
