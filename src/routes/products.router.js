@@ -11,10 +11,7 @@ const productsManager = new ProductsManager();
 let products = [];
 
 
-//  aca hice un get simple, para trabajarlo bien, mirar 7 y after
-/* router.get('/', (req, res)=>{
-    res.json(products) 
-}) */
+
 
 //Obtengo  Products con  limit
 router.get('/', async (req, res) => {
@@ -24,7 +21,7 @@ router.get('/', async (req, res) => {
             return res.status(200).json({ message: "No hay productos disponibles" });
         }
         //obtiene el valor del parametro limit de la consulta
-        const limit = parseInt(req.query.limi)
+        const limit = parseInt(req.query.limit)
         const productosLimitados = limit && !isNaN(limit) ? productos.slice(0, limit) : productos;
         res.status(200).json(productosLimitados)
     }
@@ -35,16 +32,24 @@ router.get('/', async (req, res) => {
 })
 
 // aca hago el get par obtener un producto por su id
-router.get('/:pid', (req, res) => {
-    const prodId = req.params.pid
-    const producto = products.find(producto => producto.id === prodId);
-    if (!producto) {
-        return res.status(404).send({ status: "error", error: "Product not found" });
+router.get('/:pid', async (req, res) => {
+    try{
+        const productos = await productsManager.leerProducto();
+        const prodId = req.params.pid
+        const producto = productos.find(producto => producto.id === prodId);
+        if (!producto) {
+            return res.status(404).send({ status: "error", error: "Product not found" });
+        }
+        res.send(producto);
     }
-    res.send(producto);
+    catch(error){
+        console.log(error);
+        res.status(500).send({ status: 'error', error: "Error al obtener producto buscado" });
+    }
+ 
 })
 
-// POST
+// POST al JSON
 
 router.post('/', async (req, res) => {
    try{
@@ -77,39 +82,7 @@ router.post('/', async (req, res) => {
 
 })
 
-///////////////// post viejo
 
-/*
-router.post('/', (req, res) => {
-    const { title, description, code, price, status = true, stock, category, thumbnails, } = req.body;
-
-    //validar producto
-
-    if (!title || !description || !code || !price || !stock || !category) {
-        return res.status(400).json({ error: 'Datos inválidos' });
-    }
-
-    // creo el producto y lo agrego a la lista
-
-    const newProduct = {
-        id: uuidv4(), // puse +1, porque es raro que su id sea cero. Otra opcion
-        title,
-        description,
-        code,
-        price,
-        status,
-        stock,
-        category,
-        thumbnails
-
-    }
-
-    products.push(newProduct);
-    res.status(201).json(newProduct);
-
-
-})
-*/
 
 
 // PUT
@@ -170,3 +143,61 @@ router.delete('/:pid', (req, res) => {
 })
 
 export default router;
+
+
+
+//----------------------------------------------------------------------
+
+// viejo
+
+
+//  aca hice un get simple, para trabajarlo bien, mirar 7 y after
+/* router.get('/', (req, res)=>{
+    res.json(products) 
+}) */
+
+
+    // aca hago el get par obtener un producto por su id
+/* router.get('/:pid', (req, res) => {
+    const prodId = req.params.pid
+    const producto = products.find(producto => producto.id === prodId);
+    if (!producto) {
+        return res.status(404).send({ status: "error", error: "Product not found" });
+    }
+    res.send(producto);
+}) */
+
+
+    ///////////////// post viejo
+
+/*
+router.post('/', (req, res) => {
+    const { title, description, code, price, status = true, stock, category, thumbnails, } = req.body;
+
+    //validar producto
+
+    if (!title || !description || !code || !price || !stock || !category) {
+        return res.status(400).json({ error: 'Datos inválidos' });
+    }
+
+    // creo el producto y lo agrego a la lista
+
+    const newProduct = {
+        id: uuidv4(), // puse +1, porque es raro que su id sea cero. Otra opcion
+        title,
+        description,
+        code,
+        price,
+        status,
+        stock,
+        category,
+        thumbnails
+
+    }
+
+    products.push(newProduct);
+    res.status(201).json(newProduct);
+
+
+})
+*/
