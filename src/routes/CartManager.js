@@ -1,12 +1,9 @@
-///   arreglarlo bien
-
-
 import fs from 'fs/promises';
 
 class CartManager {
 
   constructor() {
-    this.filePath = './src/data/cart.json';  // Ruta al archivo del cart
+    this.filePath = '../src/data/carts.json';  // Ruta al archivo del cart
   }
 
   // Función para crear un carrito con ID único autoincremental

@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
 
 // aca hago el get par obtener un producto por su id
 router.get('/:pid', async (req, res) => {
-    try{
+    try {
         const productos = await productsManager.leerProducto();
         const prodId = req.params.pid
         const producto = productos.find(producto => producto.id === prodId);
@@ -42,43 +42,43 @@ router.get('/:pid', async (req, res) => {
         }
         res.send(producto);
     }
-    catch(error){
+    catch (error) {
         console.log(error);
         res.status(500).send({ status: 'error', error: "Error al obtener producto buscado" });
     }
- 
+
 })
 
 // POST al JSON
 
 router.post('/', async (req, res) => {
-   try{
-    const { title, description, code, price, status = true, stock, category, thumbnails, } = req.body;
+    try {
+        const { title, description, code, price, status = true, stock, category, thumbnails, } = req.body;
 
-    //validar producto
-    if (!title || !description || !code || !price || !stock || !category) {
-        return res.status(400).json({ error: 'Datos inválidos' });
+        //validar producto
+        if (!title || !description || !code || !price || !stock || !category) {
+            return res.status(400).json({ error: 'Datos inválidos' });
+        }
+        // creo el producto y lo agrego a la lista
+
+        await productsManager.crearProducto({
+            id: uuidv4(),
+            title,
+            description,
+            code,
+            price,
+            status,
+            stock,
+            category,
+            thumbnails
+        })
+        res.status(201).send({ status: "success", message: "Producto creado" });
+
     }
-    // creo el producto y lo agrego a la lista
-
-    await productsManager.crearProducto( {
-        id: uuidv4(),
-        title,
-        description,
-        code,
-        price,
-        status,
-        stock,
-        category,
-        thumbnails
-    })
-    res.status(201).send({status: "success", message: "Producto creado"});
-   
-   }
-   catch(error){
-    console.log(error);
+    catch (error) {
+        console.log(error);
         res.status(500).send({ status: 'error', error: "Error al crear producto" });
-   }
+    }
 
 })
 
@@ -87,41 +87,20 @@ router.post('/', async (req, res) => {
 
 // PUT
 
-router.put('/:pid', (req, res) => {
+router.put('/:pid', async (req, res) => {
     const productoBuscado = req.params.pid;
-    const { title, description, code, price, status, stock, category, thumbnails, } = req.body;
 
-    const productoIndex = products.findIndex(producto => producto.id === productoBuscado)
+    const nuevosDatos = req.body;
+    try {
+        // Llamar al método editarProducto del productManager
+        const productoActualizado = await productsManager.editarProducto(productoBuscado, nuevosDatos);
 
-    if (productoIndex === -1) {
-        return res.status(404).json({ error: 'Producto no encontrada' })
+        // Enviar la respuesta con el producto actualizado
+        res.json(productoActualizado);
+    } catch (error) {
+        // Enviar una respuesta de error si algo salió mal
+        res.status(404).json({ error: error.message });
     }
-
-
-    // Actualizar el objeto con los campos aportados. Si  un campo NO fue aportado, debe quedar igual.
-    //el id debe ser el mismo
-
-    // Obtener el producto actual
-    const productoActual = products[productoIndex];
-
-    // Actualizar los campos solo si están presentes en la solicitud
-    const productoActualizado = {
-        ...productoActual, // Mantiene los valores actuales
-        title: title !== undefined ? title : productoActual.title,
-        description: description !== undefined ? description : productoActual.description,
-        code: code !== undefined ? code : productoActual.code,
-        price: price !== undefined ? price : productoActual.price,
-        status: status !== undefined ? status : productoActual.status,
-        stock: stock !== undefined ? stock : productoActual.stock,
-        category: category !== undefined ? category : productoActual.category,
-        thumbnails: thumbnails !== undefined ? thumbnails : productoActual.thumbnails,
-    };
-
-    // Actualiza el producto en el array
-    products[productoIndex] = productoActualizado;
-
-    // Enviar la respuesta con el producto actualizado
-    res.json(productoActualizado);
 
 })
 
@@ -130,75 +109,17 @@ router.put('/:pid', (req, res) => {
 //DELETE La ruta DELETE /:pid deberá eliminar el producto con el pid indicado. 
 
 
-router.delete('/:pid',  async (req, res) => {
-    try{
-     const productoIdAEliminar = req.params.pid;
-      await productsManager.eliminarProducto(productoIdAEliminar)
-    res.status(204).json({ mensaje: 'Producto eliminado' })
-    }   
-     catch(error){
+router.delete('/:pid', async (req, res) => {
+    try {
+        const productoIdAEliminar = req.params.pid;
+        await productsManager.eliminarProducto(productoIdAEliminar)
+        res.status(204).json({ mensaje: 'Producto eliminado' })
+    }
+    catch (error) {
         console.log(error);
         res.status(500).send({ status: 'error', error: "Error al eliminar producto buscado" });
     }
-    
 })
 
 export default router;
 
-
-
-//----------------------------------------------------------------------
-
-// viejo
-
-
-//  aca hice un get simple, para trabajarlo bien, mirar 7 y after
-/* router.get('/', (req, res)=>{
-    res.json(products) 
-}) */
-
-
-    // aca hago el get par obtener un producto por su id
-/* router.get('/:pid', (req, res) => {
-    const prodId = req.params.pid
-    const producto = products.find(producto => producto.id === prodId);
-    if (!producto) {
-        return res.status(404).send({ status: "error", error: "Product not found" });
-    }
-    res.send(producto);
-}) */
-
-
-    ///////////////// post viejo
-
-/*
-router.post('/', (req, res) => {
-    const { title, description, code, price, status = true, stock, category, thumbnails, } = req.body;
-
-    //validar producto
-
-    if (!title || !description || !code || !price || !stock || !category) {
-        return res.status(400).json({ error: 'Datos inválidos' });
-    }
-
-    // creo el producto y lo agrego a la lista
-
-    const newProduct = {
-        id: uuidv4(), // puse +1, porque es raro que su id sea cero. Otra opcion
-        title,
-        description,
-        code,
-        price,
-        status,
-        stock,
-        category,
-        thumbnails
-
-    }
-
-    products.push(newProduct);
-    res.status(201).json(newProduct);
-
-
-})
-*/

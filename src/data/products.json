@@ -1,0 +1,24 @@
+[
+  {
+    "id": "0e1d500e-51f2-4686-b08b-091d31115fc8",
+    "title": "Coca",
+    "description": "Es una botella de coca cola",
+    "code": "botella",
+    "price": 1050,
+    "status": true,
+    "stock": 1500,
+    "category": "Bebida",
+    "thumbnails": ""
+  },
+  {
+    "id": "1fba6e1c-91aa-4059-9757-d9af7183f880",
+    "title": "Pepsi",
+    "description": "Es una botella de coca cola",
+    "code": "botella",
+    "price": 123,
+    "status": true,
+    "stock": 1500,
+    "category": "Bebida",
+    "thumbnails": ""
+  }
+]

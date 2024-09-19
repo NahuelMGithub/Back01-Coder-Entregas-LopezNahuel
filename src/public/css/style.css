@@ -58,7 +58,9 @@ footer p {
     flex-direction: column;
     border: 2px solid black;
     border-radius: 20px;
-    width: 80%;
+     margin-left: 5%;
+    width: 90%;
     min-height: 50%;
+    height: 650px;
     background-color: beige;
 }

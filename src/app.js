@@ -2,18 +2,17 @@ import express from'express';
 import handlebars from'express-handlebars';
 import __dirname from './utils.js';
 
-//Importar los routes
+//--------------------Importar los routes
 
 import viewRouter from './routes/views.router.js'
 
-//---------routers viejos
+//---------routers viejos (preentrega 1)
 import productRouter from './routes/products.router.js';
 import cartRouter from './routes/carts.router.js';
-
+//---------------------------------------------
 
 //--------importar el constructor del servidor de sockets
 import { Server } from 'socket.io';
-
 
 // esta constante la uso para ambas entregas, así que la dejo arriba
 const app = express();
@@ -22,27 +21,22 @@ app.use(express.static(__dirname+ '/public'));
 //--------------------------------------------------------------------------------------------------
 //------------------------------------------ preentrega 1
 //--------------------------------------------------------
-
-
 //Inicializar el servidor
-app.listen(8080, () => {
+/*app.listen(8080, () => {
     console.log("El servidor se encuentra escuchando, tal como era hasta la preentrega 01");
 })
-
 // Middleware para analizar el cuerpo de las solicitudes
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
-
 //Implementar los routers 
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
+*/
+//-------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------- 
+//--------------------------------------------------------------------------------------------------------
 
 
-//--------------------------------------------------------
-//------------------------------------------ lo anterior era de preentrega 1
-//---------------------------------------------------------------------------------------------------------
-
-/*
 //-------- vamos a crear un servidor http para que tenga donde vivir el servidor socket
 const httpServer = app.listen(8080, ()=>{
     console.log("El servidor se encuentra en el puerto 8080");
@@ -66,6 +60,7 @@ app.use('/',viewRouter);
 
 
 let messages = [] // aca voy guardando los mensajes
+let users = [] // aca voy guardando los usuarios conectados
 
 io.on('connection', socket =>{
     console.log('nuevo cliente conectado')
@@ -80,6 +75,12 @@ socket.on('message', (data)=>{ //aca se escucha message, tiene que coincidir el 
 })
 
 socket.on('userAuthenticated', user =>{
+
+    //Almaceno el nombre de usuario por cliente
+    users[socket.id] = user
+    //emito lista de usuarios a todos
+    io.emit('userList', Object.values(users)) // da la lista completa de los usuarios
+
     //aca le emito al usuario el chat
     socket.emit('messageLogs', messages)
 
@@ -87,4 +88,4 @@ socket.on('userAuthenticated', user =>{
     socket.broadcast.emit('newUserConected', user);
 })
 
-}) */
+}) 

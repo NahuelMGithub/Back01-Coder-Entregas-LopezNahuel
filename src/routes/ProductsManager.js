@@ -3,7 +3,7 @@ import fs from 'fs/promises'; // Importación ES6 para fs.promises
 class ProductsManager {
 
   constructor() {
-    this.filePath = '../products.json';
+    this.filePath = '../src/data/products.json';
   }
 
   async crearProducto(producto) {
@@ -50,6 +50,41 @@ class ProductsManager {
       console.error('Error al eliminar producto:', error);
     }
   }
+  async editarProducto(idProducto, nuevosDatos) {
+    try {
+      // Leer todos los productos
+      let productos = await this.leerProducto();
+
+      // Encontrar el índice del producto a editar
+      const productoIndex = productos.findIndex(producto => producto.id === idProducto);
+      if (productoIndex === -1) {
+        throw new Error('Producto no encontrado');
+      }
+
+      // Obtener el producto actual
+      const productoActual = productos[productoIndex];
+
+      // Actualizar solo los campos proporcionados
+      const productoActualizado = {
+        ...productoActual,
+        ...nuevosDatos // Sobrescribe solo los campos proporcionados en nuevosDatos
+      };
+
+      // Actualizar el producto en el array
+      productos[productoIndex] = productoActualizado;
+
+      // Guardar los productos actualizados en el archivo
+      await fs.writeFile(this.filePath, JSON.stringify(productos, null, 2));
+      console.log('Producto actualizado exitosamente!');
+
+      return productoActualizado;
+    } catch (error) {
+      console.error('Error al editar producto:', error);
+      throw error;
+    }
+  }
 }
+
+
 
 export default ProductsManager

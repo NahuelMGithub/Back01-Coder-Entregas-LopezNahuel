@@ -1,73 +1,71 @@
 import { Router } from "express";
-import {v4 as uuidv4 } from 'uuid';
+import ProductsManager from "./ProductsManager.js";
+import CartManager from "./CartManager.js";
 
 const router = Router();
-
+const productsManager = new ProductsManager();
+const cartManager = new CartManager();
 let carts = [];
 
-//----- ruta POST
-
-router.post('/', (req, res) =>{
-    const {products } = req.body;
-
-   //validar producto
-
-    if(!products ){
-       return res.status(400).json({ error : 'Datos inválidos'});
-   }
- 
-    // creo el producto y lo agrego a la lista
-
-    const newCart = {
-           id: uuidv4(), 
-           products
+// creo el producto y lo agrego a la lista
+router.post('/', async (req, res) => {
+    try {
+        const { productId, quantity } = req.body;
+        //validar producto
+        if (!productId || !quantity || quantity <= 0) {
+            return res.status(400).send({ status: 'error', message: 'Datos inválidos' });
+        }
+        //verificamos si el producto existe
+        const productos = await productsManager.leerProducto();
+        const producto  = productos.find(p => p.id === productId)
+        if(!producto){
+            return res.status(400).send({ status: 'error', message: 'Producto no encontrado' });
+        }
+       //Si el producto existe, ahora creo el carrito y le agrego el producto
+        await cartManager.createCart(); //crea el carrito
+        const  carritos = await cartManager.getCart();   
+        const newCart = carritos[carritos.length - 1] // obtengo el ultimo carrito. (recien creado)
+        await cartManager.addProduct(newCart.id, productId, quantity);
+        res.status(201).send({ status: 'success', message: 'Carrito creado con exito y el producto fue agregado' })
     }
-
-    carts.push(newCart);
-    res.status(201).json(newCart);
+    catch (error) {
+        console.log(error);
+        res.status(500).send({ status: 'error', error: "Error al crear  el carrito y agregar un  producto" });
+    }
 })
 
-router.get('/:cid', (req, res)=>{
-    const carritoID = req.params.cid
-    const carritoBuscado = carts.find(carrito => carrito.id === carritoID); 
-    if (!carritoBuscado) { 
-        return res.status(404).send({ status: "error", error: "Cart not found" });
-     } 
-     res.send(carritoBuscado);
+// La ruta GET /:cid deberá listar los productos que pertenezcan al carrito con el parámetro cid proporcionados.
+router.get('/:cid', async (req, res) => {
+    try {
+        const carritoID = parseInt(req.params.cid); // Asegúrate de convertir a número
+        const carritos = await cartManager.getCart(); 
+        const carritoIndex = carritos.findIndex(carrito => carrito.id === carritoID);
+        
+        if (carritoIndex === -1) {
+            return res.status(404).send({ status: "error", error: "Cart not found" });
+        }
+        res.send(carritos[carritoIndex]);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ status: 'error', error: "Error al buscar el carrito" });
+    }
+});
 
-})
-
-
-/*
-
-1)  busco el carrito por id
-si no existe genero error
-si existe, busco producto. 
- si NO existe, agrego el id  y pongo quantity 1
- si existe, mantengo id y quantity=+1
- retorno el    carrito
-
-*/
-
-
-router.post('/:cid/product/:pid', (req, res) =>{
+// post
+// dado un carrito y un producto, obtengo ese producto
+router.post('/:cid/product/:pid', (req, res) => {
     const carritoBuscado = req.params.cid;
     const productoBuscado = req.params.pid;
-
     // Buscar el carrito por su ID
     const carritoIndex = carts.findIndex(carrito => carrito.id === carritoBuscado);
-
     // Si el carrito no se encuentra, retornar error 404
     if (carritoIndex === -1) {
         return res.status(404).json({ error: 'Carrito no encontrado' });
     }
-
     // Obtener el carrito actual
     const carritoActual = carts[carritoIndex];
-
     // Buscar si el producto ya está en el carrito
     const productoEnCarrito = carritoActual.products.find(prod => prod.product === productoBuscado); // no estoy seguro si es prod.product o .id
-
     if (productoEnCarrito) {
         // Si el producto ya está en el carrito, incrementar su cantidad
         productoEnCarrito.quantity += 1;
@@ -78,12 +76,8 @@ router.post('/:cid/product/:pid', (req, res) =>{
             quantity: 1
         });
     }
-
     // Actualizar el carrito en la lista de carritos
     carts[carritoIndex] = carritoActual;
-
-    
-
     // Devuelve el carrito actualizado
     res.json(carritoActual);
 })
