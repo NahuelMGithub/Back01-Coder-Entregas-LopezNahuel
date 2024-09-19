@@ -88,4 +88,20 @@ socket.on('userAuthenticated', user =>{
     socket.broadcast.emit('newUserConected', user);
 })
 
+   // aca  escucho cuando si alguien esta tipeando
+     socket.on('typing' , ()=>{
+    socket.broadcast.emit('usuarioEscribiendo', users[socket.id])
+    
+})
+
+
+    // aca  escucho cuando se va un usuario
+    socket.on('disconnect' , ()=>{
+        delete users[socket.id]
+        io.emit('userList', Object.values(users))
+        
+    })
+
+
 }) 
+

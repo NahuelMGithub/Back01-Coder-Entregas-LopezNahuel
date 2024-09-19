@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines":{
-    "node":  ">=14.17.6"
+  "engines": {
+    "node": ">=14.17.6"
   },
   "scripts": {
     "start": "node src/app.js",
@@ -16,6 +16,7 @@
   "dependencies": {
     "express": "^4.19.2",
     "express-handlebars": "^8.0.1",
+    "nodemon": "^3.1.6",
     "socket.io": "^4.7.5",
     "uuid": "^10.0.0"
   },

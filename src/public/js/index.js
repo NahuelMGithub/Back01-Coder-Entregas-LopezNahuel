@@ -41,6 +41,12 @@ chatBox.addEventListener('keyup', (evt) => {
     }
 })
 
+//Event listener para el imput del chat, marcando que esta tipeando
+chatBox.addEventListener('input', () => {
+    socket.emit('typing')
+})
+
+
 
 // aca  escucho el evento userList, para ver los usuarios conectados
 socket.on('userList' , (data)=>{
@@ -64,7 +70,11 @@ socket.on('messageLogs' , (data)=>{
 
 
 
-
+socket.on('usuarioEscribiendo', (user)=>{
+    let objetTyping = document.getElementById('typing');
+    objetTyping.innerHTML = user.user + " esta escribiendo"
+    
+})
 
 
 
