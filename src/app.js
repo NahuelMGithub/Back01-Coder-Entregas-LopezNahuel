@@ -2,6 +2,8 @@ import express from'express';
 import handlebars from'express-handlebars';
 import __dirname from './utils.js';
 
+import ProductsManager from "../src/routes/ProductsManager.js";
+const productsManager = new ProductsManager();
 //--------------------Importar los routes
 
 import homeViews from './routes/home.router.js'
@@ -44,27 +46,45 @@ let messages = [] // aca voy guardando los mensajes
 let users = [] // aca voy guardando los usuarios conectados
 let productos = []
 
+
+
+
 io.on('connection', socket =>{
     console.log('nuevo cliente conectado')
 
-socket.on('productocreado', (data)=>{
+socket.on('productocreado', async (producto)=>{
 
-    io.emit('newProduct', data);
+    io.emit('newProduct', producto);
 
-    
+    try {
+        await productsManager.crearProducto(producto);
+        const productos = await productsManager.leerProducto();
+        io.emit('actualizarProductos', productos); // Emitir a todos los clientes
+    } catch (error) {
+        console.error('Error al agregar producto:', error);
+    }
 
 })
+
+socket.on('eliminarProductoPorId', async idProducto =>{
+
+     io.emit('productElimnate', idProducto); 
+
+    try {
+        await productsManager.eliminarProducto(idProducto);
+        const productos = await productsManager.leerProducto();
+        io.emit('actualizarProductos', productos); // Emitir a todos los clientes
+    } catch (error) {
+        console.error('Error al eliminar el producto:', error);
+    }
+})
+   
+});
     
 
     //Desde aca escuchamos los eventos emitidos por el cliente
-socket.on('message', (data)=>{ //aca se escucha message, tiene que coincidir el nombre!
-    messages.push(data);
 
-    //ahora se los envio a todos con la etiqueta messageLogs 
-
-    io.emit('messageLogs', messages)
-})
-
+/* 
 socket.on('userAuthenticated', user =>{
 
     //Almaceno el nombre de usuario por cliente
@@ -93,6 +113,6 @@ socket.on('userAuthenticated', user =>{
         
     })
 
+ */
 
-}) 
 

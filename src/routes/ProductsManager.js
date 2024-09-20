@@ -1,5 +1,5 @@
 import fs from 'fs/promises'; // Importación ES6 para fs.promises
-
+import { v4 as uuidv4 } from 'uuid';
 class ProductsManager {
 
   constructor() {
@@ -7,6 +7,7 @@ class ProductsManager {
   }
 
   async crearProducto(producto) {
+    producto.id = uuidv4()
     try {
       let productos = await this.leerProducto();
       productos.push(producto);
@@ -30,23 +31,26 @@ class ProductsManager {
     }
   }
 
-  async eliminarProducto(idProducto){
-    try{
+  async eliminarProducto(idProducto) {
+     
+    try {
+      console.log("Intentando eliminar producto " + idProducto);
       let productos = await this.leerProducto();
-      const productoIndex = productos.findIndex(producto => producto.id === idProducto);
+      const productoIndex = productos.findIndex(p => p.id === idProducto);
+      
       if (productoIndex === -1) {
-        console.error('El producto no existe', error);
-        throw error;
-    }
-    // Eliminar el producto del array
-    productos.splice(productoIndex, 1);
-
-    // Guardar los productos actualizados en el archivo
-    await fs.writeFile(this.filePath, JSON.stringify(productos, null, 2));
-    console.log('Producto eliminado exitosamente!');
-
-    }
-    catch (error) {
+        console.error('El producto no existe');
+        throw new Error('El producto no existe'); // Lanza un nuevo error con un mensaje
+      }
+      
+      // Eliminar el producto del array
+      productos.splice(productoIndex, 1);
+  
+      // Guardar los productos actualizados en el archivo
+      await fs.writeFile(this.filePath, JSON.stringify(productos, null, 2));
+      console.log('Producto eliminado exitosamente!');
+  
+    } catch (error) {
       console.error('Error al eliminar producto:', error);
     }
   }

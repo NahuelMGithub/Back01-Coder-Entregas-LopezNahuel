@@ -1,17 +1,6 @@
 [
   {
-    "id": 1,
-    "title": "Catan",
-    "description": "Juego de estrategia y comercio en el que los jugadores colonizan una isla.",
-    "code": "CAT123",
-    "price": 50,
-    "status": true,
-    "stock": 10,
-    "category": "Competitivo",
-    "thumbnails": "../img/catan.jpg"
-  },
-  {
-    "id": 2,
+    "id": "2",
     "title": "Carcassonne",
     "description": "Juego de colocación de losetas donde los jugadores construyen ciudades y caminos.",
     "code": "CAR234",
@@ -22,7 +11,7 @@
     "thumbnails": "../img/images.jfif"
   },
   {
-    "id": 3,
+    "id": "3",
     "title": "Terraforming Mars",
     "description": "Juego donde los jugadores controlan corporaciones que terraforman Marte.",
     "code": "TM345",
@@ -33,7 +22,7 @@
     "thumbnails": "../img/Terraforming Mars.jfif"
   },
   {
-    "id": 4,
+    "id": "4",
     "title": "Azul",
     "description": "Juego de colocación de fichas basado en la creación de patrones decorativos.",
     "code": "AZ456",
@@ -41,10 +30,10 @@
     "status": true,
     "stock": 8,
     "category": "Abstracto",
-    "thumbnails": "../img/catan.jpg"
+    "thumbnails": "../img/Azul.jpg"
   },
   {
-    "id": 5,
+    "id": "5",
     "title": "Gloomhaven",
     "description": "Juego de aventura y combate táctico con una rica narrativa.",
     "code": "GH567",
@@ -52,10 +41,10 @@
     "status": true,
     "stock": 3,
     "category": "Cooperativo",
-    "thumbnails": "../img/catan.jpg"
+    "thumbnails": "../img/Gloomhaven.jpg"
   },
   {
-    "id": 6,
+    "id": "6",
     "title": "Pandemic",
     "description": "Juego cooperativo donde los jugadores trabajan juntos para detener enfermedades globales.",
     "code": "PAN678",
@@ -63,10 +52,10 @@
     "status": true,
     "stock": 12,
     "category": "Cooperativo",
-    "thumbnails": "../img/catan.jpg"
+    "thumbnails": "../img/Pandemic.jpg"
   },
   {
-    "id": 7,
+    "id": "7",
     "title": "7 Wonders",
     "description": "Juego de construcción de civilizaciones en el que los jugadores desarrollan maravillas del mundo.",
     "code": "7W789",
@@ -74,10 +63,10 @@
     "status": true,
     "stock": 9,
     "category": "Euro",
-    "thumbnails": ""
+    "thumbnails": "../img/Wonders.jpg"
   },
   {
-    "id": 8,
+    "id": "8",
     "title": "Ticket to Ride",
     "description": "Juego de construcción de rutas ferroviarias a través de diferentes regiones.",
     "code": "TTR890",
@@ -85,10 +74,10 @@
     "status": true,
     "stock": 20,
     "category": "Competitivo",
-    "thumbnails": ""
+    "thumbnails": "../img/Ticket to Ride.jpg"
   },
   {
-    "id": 9,
+    "id": "9",
     "title": "Agricola",
     "description": "Juego de gestión de recursos en el que los jugadores administran una granja.",
     "code": "AGR901",
@@ -96,10 +85,10 @@
     "status": true,
     "stock": 6,
     "category": "Euro",
-    "thumbnails": ""
+    "thumbnails": "../img/Agricola.jpg"
   },
   {
-    "id": 10,
+    "id": "10",
     "title": "Dominion",
     "description": "Juego de construcción de mazos donde los jugadores buscan construir su reino.",
     "code": "DOM012",
@@ -107,10 +96,10 @@
     "status": true,
     "stock": 11,
     "category": "Competitivo",
-    "thumbnails": ""
+    "thumbnails": "../img/Dominion.jpg"
   },
   {
-    "id": 11,
+    "id": "11",
     "title": "Mage Knight",
     "description": "Juego de aventura y exploración en un mundo de fantasía.",
     "code": "MK123",
@@ -118,10 +107,10 @@
     "status": true,
     "stock": 4,
     "category": "Solitario",
-    "thumbnails": ""
+    "thumbnails": "../img/Mage Knight.jpg"
   },
   {
-    "id": 12,
+    "id": "12",
     "title": "The Castles of Burgundy",
     "description": "Juego de estrategia donde los jugadores construyen asentamientos y desarrollan su región.",
     "code": "COB234",
@@ -129,10 +118,10 @@
     "status": true,
     "stock": 7,
     "category": "Euro",
-    "thumbnails": ""
+    "thumbnails": "../img/The Castles of Burgundy.jpg"
   },
   {
-    "id": 13,
+    "id": "13",
     "title": "Root",
     "description": "Juego de guerra asimétrico donde varias facciones luchan por el control de un bosque.",
     "code": "ROO345",
@@ -140,10 +129,10 @@
     "status": true,
     "stock": 5,
     "category": "Competitivo",
-    "thumbnails": ""
+    "thumbnails": "../img/Root.jpg"
   },
   {
-    "id": 14,
+    "id": "14",
     "title": "Spirit Island",
     "description": "Juego cooperativo donde los jugadores encarnan espíritus que defienden su isla de los invasores.",
     "code": "SI456",
@@ -151,10 +140,10 @@
     "status": true,
     "stock": 6,
     "category": "Cooperativo",
-    "thumbnails": ""
+    "thumbnails": "../img/Spirit Island.jpg"
   },
   {
-    "id": 15,
+    "id": "15",
     "title": "Scythe",
     "description": "Juego de estrategia en un universo dieselpunk donde los jugadores controlan mechs y territorios.",
     "code": "SCY567",
@@ -162,6 +151,6 @@
     "status": true,
     "stock": 8,
     "category": "Competitivo",
-    "thumbnails": ""
+    "thumbnails": "../img/Scythe.jpg"
   }
 ]

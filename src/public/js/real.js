@@ -1,7 +1,50 @@
 const socket = io(); // del lado del cliente
 
-let user; //identificador del cliente
-let chatBox = document.getElementById('chatbox');
+
+socket.on('actualizarProductos', (productos) => {
+    let productosDiv = document.getElementById('productsContenedorDeTiempoReal');
+    
+    if (productosDiv) {
+        productosDiv.innerHTML = ""; // Limpiar el contenedor
+        
+        // Agregar la fila
+        const rowDiv = document.createElement('div');
+        rowDiv.className = "row";
+
+        productos.forEach(producto => {
+            const productoDiv = document.createElement('div');
+            productoDiv.className = "col-md-4"; // Cada card ocupa 1/3 del ancho de la pantalla
+
+            productoDiv.innerHTML = `
+                <div class="card mb-4 shadow-sm">
+                    <img src="${producto.thumbnails || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Imagen de ${producto.title}">
+                    <div class="card-body">
+                        <h5 class="card-title">${producto.title}</h5>
+                        <p class="card-text">${producto.description}</p>
+                        <p class="card-text">Precio: $${producto.price}</p>
+                        <p class="card-text">Stock: ${producto.stock}</p>
+                        <p class="card-text">Categoría: ${producto.category}</p>
+                        <p class="card-text">Estado: ${producto.status ? 'Disponible' : 'No disponible'}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Código: ${producto.code}</small>
+                            <button class="btn btn-danger btn-sm" onclick="eliminarProducto('${producto.id}')">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            rowDiv.appendChild(productoDiv); // Agregar cada producto a la fila
+        });
+
+        productosDiv.appendChild(rowDiv); // Agregar la fila al contenedor
+    } else {
+        alert("No se pudo encontrar el contenedor de productos.");
+    }
+});
+
+
+
+
+/////////////////////////////////////////////////
 
 
 
@@ -39,8 +82,8 @@ btnAgregarProducto.addEventListener('click', () => {
             `<input type="text" id="code" class="swal2-input" placeholder="Código del juego">` +
             `<input type="number" id="price" class="swal2-input" placeholder="Precio del juego">` +
             `<input type="number" id="stock" class="swal2-input" placeholder="Stock disponible">` +
-            `<input type="text" id="category" class="swal2-input" placeholder="Categoría del juego">` +
-            `<input type="text" id="thumbnails" class="swal2-input" placeholder="URL de la imagen (thumbnail)">`,
+            `<input type="text" id="category" class="swal2-input" placeholder="Categoría del juego">`,
+           
         showCancelButton: true,
         confirmButtonText: 'Aceptar',
         cancelButtonText: 'Cancelar',
@@ -52,9 +95,9 @@ btnAgregarProducto.addEventListener('click', () => {
             const price = document.getElementById('price').value;
             const stock = document.getElementById('stock').value;
             const category = document.getElementById('category').value;
-            const thumbnails = document.getElementById('thumbnails').value;
+      
 
-            if (!title || !description || !code || !price || !stock || !category || !thumbnails) {
+            if (!title || !description || !code || !price || !stock || !category) {
                 Swal.showValidationMessage('Por favor, completa todos los campos');
                 return false;
             }
@@ -65,8 +108,7 @@ btnAgregarProducto.addEventListener('click', () => {
                 code,
                 price,
                 stock,
-                category,
-                thumbnails
+                category
             };
         }
     }).then((result) => {
@@ -86,62 +128,35 @@ btnAgregarProducto.addEventListener('click', () => {
 
 
 
+function eliminarProducto(id){
+    socket.emit('eliminarProductoPorId', id); // asi emitimos el mensaje
 
+}
 
  
 
-//Escucho si se crea un producto y aviso a todoso que se creo.
+//Escucho si se crea un producto y aviso a todoso que se creo o si se elimino.
 
- socket.on('newProduct', data=>{
+  socket.on('newProduct', producto=>{
     Swal.fire({
-         text: "Nuevo producto creador ",
+         text: "Nuevo producto creado ",
          toast: true,
         position: "top-right",
         icon: "info",
-        title: `Se creo el juego ${data.title}`,
+        title: `Se creo el juego ${producto.title}`,
+        timer: 5000
+    });
+}) 
+
+socket.on('productElimnate', idProducto=>{
+    Swal.fire({
+         text: "Producto Eliminado",
+         toast: true,
+        position: "top-right",
+        icon: "info",
+        title: `Se elimino el producto ${idProducto}`,
         timer: 5000
     });
 }) 
 
 
-    /////////////----------------------------- escuchando
-/* 
-
-//Event listener para el imput del chat
-chatBox.addEventListener('keyup', (evt) => {
-    if (evt.key === 'Enter') {
-             
-        if (chatBox.value.trim().length) {
-            socket.emit('message', { user: user, message: chatBox.value }); // asi emitimos el mensaje
-            chatBox.value = '';// aca vacio el mensaje 
-        }
-    }
-})
-
-
-
-// aca  escucho el evento messageLogs
-
-socket.on('messageLogs' , (data)=>{
-    let log = document.getElementById('messageLogs');
-    let messagesHtml = ""
-    data.forEach(message => {
-        messagesHtml += `${message.user} dice:  ${message.message}<br>`
-    });
-    log.innerHTML = messagesHtml;
-})
-
-
-
-//---------- esto lo hago para que pueda dar opiniones. pero tambien
-//voy a poner que se abra un cuadro y complete un producto
-const btnOpinar = document.getElementById('opinar');
-btnOpinar.addEventListener('click', () => {
-    Swal.fire({
-        title: "Good job!",
-        text: "You clicked the button!",
-        icon: "success"
-    });
-})
-
-*/

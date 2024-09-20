@@ -23,7 +23,7 @@ POST. ¿Cómo utilizarás un emit dentro del POST?
 </div>
 
 
-<div class="productsContenedorDeHome">
+<div id="productsContenedorDeTiempoReal">
  <div class="row">
             {{#each products}} <!-- Iteramos sobre el array de productos -->
             <div class="col-md-4"> <!-- Cada card ocupa 1/3 del ancho de la pantalla en pantallas medianas -->
@@ -43,11 +43,12 @@ POST. ¿Cómo utilizarás un emit dentro del POST?
                         <p class="card-text">Estado: {{#if this.status}}Disponible{{else}}No disponible{{/if}}</p> <!-- Estado del producto -->
                         <div class="d-flex justify-content-between align-items-center">
                             <small class="text-muted">Código: {{this.code}}</small> <!-- Código del producto -->
+                            <button class="btn btn-danger btn-sm" onclick="eliminarProducto('{{this.id}}')">Eliminar</button> <!-- Botón de eliminar -->
                         </div>
                     </div>
                 </div>
             </div>
-            {{/each}}
+            {{/each}} 
         </div>
 </div>
 
