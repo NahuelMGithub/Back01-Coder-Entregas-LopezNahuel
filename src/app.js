@@ -42,9 +42,19 @@ app.use('/realTimeProducts',realTimeProducts);
 
 let messages = [] // aca voy guardando los mensajes
 let users = [] // aca voy guardando los usuarios conectados
+let productos = []
 
 io.on('connection', socket =>{
     console.log('nuevo cliente conectado')
+
+socket.on('productocreado', (data)=>{
+
+    io.emit('newProduct', data);
+
+    
+
+})
+    
 
     //Desde aca escuchamos los eventos emitidos por el cliente
 socket.on('message', (data)=>{ //aca se escucha message, tiene que coincidir el nombre!

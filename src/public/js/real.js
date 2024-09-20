@@ -19,17 +19,16 @@ si lo hace, debe modificar la  la lista y ac tualizarla.
 /*
 1) validar datos, si estan todos 
 va a emitir un mensaje con un objeto:
-
 desde el servidor lo va a escuchar, va a agregar a  l a lista y luego va  renderizar 
 
 
 
 cuando alguien crea un producto, me gustari ademas que aparezca un producto creado, igual que era
-con usuario creado
+con usuario creado> LISTO
 */
 
 
-
+//-------- Boton para crear un producto.
 const btnAgregarProducto = document.getElementById('agregarProducto');
 btnAgregarProducto.addEventListener('click', () => {
     Swal.fire({
@@ -91,22 +90,22 @@ btnAgregarProducto.addEventListener('click', () => {
 
  
 
-//Escucho si se conecta un usuario nuevo.
+//Escucho si se crea un producto y aviso a todoso que se creo.
 
-/* socket.on('newUserConected', username=>{
+ socket.on('newProduct', data=>{
     Swal.fire({
-         text: "Nuevo usuario conectado",
+         text: "Nuevo producto creador ",
          toast: true,
         position: "top-right",
         icon: "info",
-        title: `${username.user} se ha unido al chat`,
+        title: `Se creo el juego ${data.title}`,
         timer: 5000
     });
-}) */
+}) 
 
 
     /////////////----------------------------- escuchando
-
+/* 
 
 //Event listener para el imput del chat
 chatBox.addEventListener('keyup', (evt) => {
@@ -145,3 +144,4 @@ btnOpinar.addEventListener('click', () => {
     });
 })
 
+*/
