@@ -1,5 +1,16 @@
 [
   {
+    "id": "1",
+"title": "Catan",
+    "description": "Juego de estrategia y comercio en el que los jugadores colonizan una isla.",
+    "code": "CAT123",
+    "price": 50,
+    "status": true,
+    "stock": 10,
+    "category": "Competitivo",
+     "thumbnails": "../img/catan.jpg"
+  },
+  {
     "id": "2",
     "title": "Carcassonne",
     "description": "Juego de colocación de losetas donde los jugadores construyen ciudades y caminos.",
