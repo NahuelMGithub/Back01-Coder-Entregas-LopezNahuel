@@ -72,5 +72,4 @@ btnOpinar.addEventListener('click', () => {
     });
 })
 
-
 export default router;
