@@ -64,3 +64,26 @@ footer p {
     height: 650px;
     background-color: beige;
 }
+
+.productsContenedorDeHome{
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
+    border-radius: 20px;
+     margin-left: 5%;
+    width: 90%;
+    min-height: 50%;
+    height: auto;
+    background-color: rgb(109, 169, 225);  
+    padding: 10px;
+}
+
+.card {
+    max-width: 300px; 
+    margin: 0 auto; 
+}
+
+.card-img-top {
+    max-height: 200px; 
+    object-fit: cover; 
+}

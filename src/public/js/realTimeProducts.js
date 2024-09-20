@@ -1,4 +1,5 @@
 const socket = io(); // del lado del cliente
+
 let user; //identificador del cliente
 let chatBox = document.getElementById('chatbox');
 
@@ -6,7 +7,7 @@ let chatBox = document.getElementById('chatbox');
 Swal.fire({
     title: "Identificate",
     input: "text",
-    text: "Cual es tu nombre?",
+    text: "Cual es tu nombre? (desde productos en tiempo real",
     inputValidator: (value) => {
         return !value && 'Necesitas escribir un nombre para continuar'
     },
@@ -18,7 +19,9 @@ Swal.fire({
     socket.emit('userAuthenticated', {user:user}); //solo le mando el nombre
 });
 
+
 //Escucho si se conecta un usuario nuevo.
+
 socket.on('newUserConected', username=>{
     Swal.fire({
          text: "Nuevo usuario conectado",
@@ -29,6 +32,8 @@ socket.on('newUserConected', username=>{
         timer: 5000
     });
 })
+
+
 
 //Event listener para el imput del chat
 chatBox.addEventListener('keyup', (evt) => {
@@ -42,17 +47,9 @@ chatBox.addEventListener('keyup', (evt) => {
 })
 
 
-// aca  escucho el evento userList, para ver los usuarios conectados
-socket.on('userList' , (data)=>{
-    let userList = document.getElementById('userList');
-    let userHtml = ""
-    data.forEach(user => {
-        userHtml += `${user.user} <br>`
-    });
-    userList.innerHTML = userHtml;
-})
 
-// aca  escucho el evento messageLogs, es decir, historial del chat
+// aca  escucho el evento messageLogs
+
 socket.on('messageLogs' , (data)=>{
     let log = document.getElementById('messageLogs');
     let messagesHtml = ""
@@ -61,13 +58,6 @@ socket.on('messageLogs' , (data)=>{
     });
     log.innerHTML = messagesHtml;
 })
-
-
-
-
-
-
-
 
 
 
@@ -82,3 +72,5 @@ btnOpinar.addEventListener('click', () => {
     });
 })
 
+
+export default router;
