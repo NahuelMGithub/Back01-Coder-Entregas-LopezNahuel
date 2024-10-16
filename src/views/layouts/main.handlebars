@@ -4,28 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+     
     <link rel="stylesheet" href="css/style.css">
     <title>Coderhouse Nahuel Lopez Back 1</title>
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="http://localhost:3037">Home</a></li> 
-                <li><a href="http://localhost:3037/newProduct">Nuevo Juego</a></li>
-                <li><a href="http://localhost:3037/cart">Mi carrito</a></li>
-                <li><a href="https://chatgpt.com/">Ayuda</a></li>
-            </ul>
-        </nav>
-    </header>
+    {{> header}}
      <main>
         {{{body}}}
      </main>
 
-    <footer>
-        <p>Git: https://github.com/NahuelMGithub/Back01-Coder-Entregas-LopezNahuel</p>
-        <p>&copy; 2024 Derechos Reservados</p>
-    </footer>  
+    {{> footer}}
+
       
 </body>
 </html>

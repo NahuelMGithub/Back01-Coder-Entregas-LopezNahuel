@@ -1,7 +1,22 @@
-          <div>
-                <p>Title: {{product.title}}</p>
-                <p>Description: {{product.description}}</p>
-                <p>Code: {{product.title}}</p>
-                <p>Price:</p>
-                
-            </div>
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="{{product.thumbnails}}" class="img-fluid rounded-start" alt="Imagen del Producto">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{product.title}}</h5>
+        <p class="card-text">{{product.description}}</p>
+        <p class="card-text"><small class="text-muted">Categoría: {{product.category}}</small></p>
+        <p class="card-text">{{#if product.status}}Disponible{{else}}No Disponible{{/if}}</p>
+        <p class="card-text">Stock: {{product.stock}}</p>
+        <p class="card-text">Precio: ${{product.price}}</p>
+        <p class="card-text"><small class="text-muted">ID: {{product._id}}</small></p>
+      </div>
+    </div>
+  </div>
+      <form action="/products/{{product._id}}?_method=DELETE" method="POST" enctype="application/x-www-form-urlencoded">
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit">Eliminar</button>
+    </form>
+</div>

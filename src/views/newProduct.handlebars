@@ -1,36 +1,52 @@
-<h1> Crear juegos nuevos</h1>
+<h1 class="text-center mb-4">Crear juegos nuevos</h1>
+<div class="container">
+  <div class="form-container p-4">
+    <form action="/products" method="POST" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="title" class="form-label">Title:</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+      </div>
 
-<form action="/products" method="POST"> <!-- Cuando se hace clcik en Submit, usa el metodo post dentro del route Products  -->
-<label for="title">Title:</label>
-        <input type="text" id="title" name="title" required>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description:</label>
+        <textarea id="description" class="form-control" name="description" required></textarea>
+      </div>
 
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" required></textarea>
+      <div class="mb-3">
+        <label for="code" class="form-label">Code:</label>
+        <input type="text" class="form-control" id="code" name="code" required>
+      </div>
 
-        <label for="code">Code:</label>
-        <input type="text" id="code" name="code" required>
+      <div class="mb-3">
+        <label for="price" class="form-label">Price:</label>
+        <input type="number" class="form-control" id="price" name="price" required>
+      </div>
 
-        <label for="price">Price:</label>
-        <input type="number" id="price" name="price" required>
-
-        <label for="status">Status:</label>
-        <select id="status" name="status" required>
-            <option value="true">Available</option>
-            <option value="false">Unavailable</option>
+      <div class="mb-3">
+        <label for="status" class="form-label">Status:</label>
+        <select id="status" class="form-control" name="status" required>
+          <option value="true">  Disponible </option>
+          <option value="false"> No disponible </option>
         </select>
+      </div>
 
-        <label for="stock">Stock:</label>
-        <input type="number" id="stock" name="stock" required>
+      <div class="mb-3">
+        <label for="stock" class="form-label">Stock:</label>
+        <input type="number" class="form-control" id="stock" name="stock" required>
+      </div>
 
-        <label for="category">Category:</label>
-        <input type="text" id="category" name="category" required>
+      <div class="mb-3">
+        <label for="category" class="form-label">Category:</label>
+        <input type="text" class="form-control" id="category" name="category" required>
+      </div>
 
-        <label for="thumbnails">Thumbnails (optional):</label>
-        <input type="text" id="thumbnails" name="thumbnails" placeholder="Image URL">
-
-        <button type="submint" onclick="createGame()">Create Juego</button>
-
-
-
-
-</form>
+{{!-- 
+      <div class="mb-3">
+        <label for="file" class="form-label">Imagen del Juego: (opcional):</label>
+          <input type="file" id="thumbnails" name="thumbnails">
+      </div>
+ --}}
+      <button type="submit" class="btn btn-primary w-100">Create Juego</button>
+    </form>
+  </div>
+</div>

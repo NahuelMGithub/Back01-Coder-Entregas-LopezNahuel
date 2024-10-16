@@ -1,0 +1,12 @@
+<h1>Lista de todos los productos</h1>
+
+<ul>
+    {{#each products}}
+    <li>
+        <h5 class="card-title">{{this.title}}</h5>
+        <p class="card-text">Precio: ${{this.price}}</p>
+        <a href="products/{{this._id}}"> Ir A Detalles </a>
+
+    </li>
+    {{/each}}
+</ul>

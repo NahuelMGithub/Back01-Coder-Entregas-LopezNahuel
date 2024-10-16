@@ -2,6 +2,9 @@ import express from'express';
 import handlebars from'express-handlebars';
 import mongoose from 'mongoose';
 
+// metodo para eliminar
+import methodOverride from 'method-override'
+
 //Import para configuracion base
 import __dirname from './utils.js';
 
@@ -14,7 +17,10 @@ const uriConexcion = process.env.URI_MONGO
 import routerProduct from './routes/products.router.js';
 
 const app = express(); 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(methodOverride('_method'));
+
 
 //niciar el motodo de app.engine
 //Configurar el motor de plantillas Handlebars
@@ -44,5 +50,3 @@ app.use('/products', routerProduct);
 app.get('/newProduct', (req, res)=>{
     res.render('newProduct');
 })
-
-// diferencia entre 3037, 8080, mongo y el index...
