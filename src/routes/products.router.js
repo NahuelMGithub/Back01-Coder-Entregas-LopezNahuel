@@ -26,13 +26,13 @@ routerProduct.post('/', uploader.single('thumbnails'),  async (req, res) => {
     }
 })
 
-//Obtengo  todos Products 
+//Obtengo  todos Products y los muestros en paginas segun como  quiero. puse 
 routerProduct.get('/', async (req, res) => {
     try {
         let page = parseInt(req.query.page);
         let row = parseInt(req.query.row);
         if (!page) page = 1
-        if (!row) row = 3
+        if (!row) row = 10
         let todosLosProductos = await productModel.paginate({}, { page, limit: row, lean: true });
 
         todosLosProductos.nextLink = todosLosProductos.hasNextPage ? `http://localhost:3037/products?page=${todosLosProductos.page + 1}&row=${row}` : '';

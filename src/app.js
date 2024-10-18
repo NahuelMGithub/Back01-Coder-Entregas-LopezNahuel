@@ -46,10 +46,8 @@ console.log('uriConexcion es ',uriConexcion)
     .catch(error=>console.log('error: ', error))
 
     // al iniciar crea por defecto un carrito. 
-    let carritoActual = await cartModel.create({
-        cart_name: "Carrito",
-        juegos: []
-    })
+    let carritoActual = await cartModel.findById("67128542c57103b888fc9f06")
+    
 
 //---- Routers 
 app.use('/products', routerProduct);
