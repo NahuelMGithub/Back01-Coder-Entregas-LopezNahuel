@@ -17,8 +17,7 @@ routerProduct.post('/', uploader.single('thumbnails'),  async (req, res) => {
         console.log('No se subió ningún archivo.');
     }  */
        
-
-        await nuevoProducto.save();
+           await nuevoProducto.save();
         res.render('product', { product: nuevoProducto.toObject() });
         console.log('el producto es: ', nuevoProducto)
     }
@@ -27,18 +26,35 @@ routerProduct.post('/', uploader.single('thumbnails'),  async (req, res) => {
     }
 })
 
-//Obtengo  Products 
+//Obtengo  todos Products 
 routerProduct.get('/', async (req, res) => {
     try {
-        let todosLosProductos = await productModel.find({});
+        let page = parseInt(req.query.page);
+        let row = parseInt(req.query.row);
+        if (!page) page = 1
+        if (!row) row = 3
+        let todosLosProductos = await productModel.paginate({}, { page, limit: row, lean: true });
 
-        res.render('allProducts', { products: todosLosProductos.map(producto => producto.toObject()) });
+        todosLosProductos.nextLink = todosLosProductos.hasNextPage ? `http://localhost:3037/products?page=${todosLosProductos.page + 1}&row=${row}` : '';
+        todosLosProductos.prevLink = todosLosProductos.hasPrevPage ? `http://localhost:3037/products?page=${todosLosProductos.page - 1}&row=${row}` : '';
+           
+        todosLosProductos.isValid = !(page <= 0) || (page > todosLosProductos.totalPages);           
+     
+        res.render('allProducts', { 
+            products: todosLosProductos.docs, 
+            page: todosLosProductos.page,
+             isValid: todosLosProductos.isValid,
+             totalPages: todosLosProductos.totalPages,
+            hasPrevPage: todosLosProductos.hasPrevPage,
+            hasNextPage: todosLosProductos.hasNextPage, 
+            nextLink :  todosLosProductos.nextLink, 
+            prevLink : todosLosProductos.prevLink
+         });
     }
     catch (error) {
-        return res.render('error', { error: 'Error al obtener productos' })
-
+        return res.render('error', { error: 'Error al obtener productos' });
     }
-})
+});
 
 // Buscar un producto por ID
 routerProduct.get('/:id', async (req, res) => {

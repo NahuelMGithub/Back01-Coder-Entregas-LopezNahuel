@@ -1,14 +1,18 @@
 import mongoose from "mongoose";
-  
-const {Schema} = mongoose;
 
-const cartsCollection = 'carrito'
+const { Schema } = mongoose;
+
+const cartsCollection = 'carritos';
 
 const cartSchema = new Schema({
-        title: String,
-        description: String,
-      })
-      
-const  cartModel = mongoose.model(cartsCollection, cartSchema ) //aca le dice el nombre de la coleccion y la estructura (schema)
+  cart_name: { type: String, required: true },
+  juegos: {
+    type: [{
+    juego: { type: mongoose.Schema.Types.ObjectId, ref: "productos" } // Referencia al modelo "productos"
+  }], default: []
+  }
+});
 
-export default cartModel
+const cartModel = mongoose.model(cartsCollection, cartSchema); // Definición del modelo con el nombre de la colección y el schema
+
+export default cartModel;

@@ -1,6 +1,7 @@
 import express from'express';
 import handlebars from'express-handlebars';
 import mongoose from 'mongoose';
+import cartModel from './models/cart.models.js';
 
 // metodo para eliminar
 import methodOverride from 'method-override'
@@ -15,6 +16,7 @@ const uriConexcion = process.env.URI_MONGO
 
 //Importar los routers routers
 import routerProduct from './routes/products.router.js';
+import routerCart from './routes/cart.router.js';
 
 const app = express(); 
 app.use(express.urlencoded({ extended: true }));
@@ -43,6 +45,12 @@ console.log('uriConexcion es ',uriConexcion)
     .then(()=>console.log('conectado a BD Atlas'))
     .catch(error=>console.log('error: ', error))
 
+    // al iniciar crea por defecto un carrito. 
+    let carritoActual = await cartModel.create({
+        cart_name: "Carrito",
+        juegos: []
+    })
+
 //---- Routers 
 app.use('/products', routerProduct);
 //app.use('/cart', routerCart);
@@ -50,3 +58,8 @@ app.use('/products', routerProduct);
 app.get('/newProduct', (req, res)=>{
     res.render('newProduct');
 })
+
+
+app.use('/cart', routerCart);
+//app.use('/cart', routerCart);
+
