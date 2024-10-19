@@ -12,7 +12,19 @@ const productSchema = new Schema({
         price: Number,
         status: Boolean,
         stock: Number,
-        category: String,
+        category: {
+          type: String,
+          enum : ["EuroGame",
+                  "PartyGame",
+                  "Estrategia",
+                  "Misterio",
+                  "Abstracto",
+                  "Cooperativo",
+                  "Clasico",
+                  "Solitario" 
+                ], 
+          default: "Clasico" 
+        },
         thumbnails: String
       })
     

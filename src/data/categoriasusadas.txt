@@ -1,0 +1,8 @@
+EuroGame
+PartyGame
+Estrategia
+Misterio
+Abstracto
+Cooperativo
+Clasico
+

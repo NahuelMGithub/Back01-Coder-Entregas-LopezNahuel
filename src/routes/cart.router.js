@@ -4,11 +4,11 @@ import cartModel from '../models/cart.models.js'
 
 
 const routerCart = Router();
-
+/// Get carrito -> Funciona
 routerCart.get('/', async (req, res) => {
     try {
         // Obtén el carrito y poblalo para incluir los detalles de los productos
-        let carritoActual = await cartModel.findById("671306187129263c6caab6c7").populate('juegos.juego');
+        let carritoActual = await cartModel.findById("6713d6ce6b5dba2b8e71342f").populate('juegos.juego');
         console.log(carritoActual.juegos)
         res.render('cart', { products: carritoActual.juegos });
     } catch (error) {
@@ -18,7 +18,24 @@ routerCart.get('/', async (req, res) => {
 });
 
 
-// posteo correctamente un carrito desde POSTMAN
+/// Get carrito por ID -> Funciona
+// Modificar la ruta /:cid para que al traer todos los productos, los traiga completos mediante un “populate”. De esta manera almacenamos sólo el Id, pero al solicitarlo 
+// podemos desglosar los productos asociados.
+routerCart.get('/:cid', async (req, res) => {
+    try {
+        // Obtén el carrito y poblalo para incluir los detalles de los productos
+        let   {cid} = req.params;
+       let juegos = await cartModel.findById(cid).populate('juegos.juego');
+        res.send(juegos)
+       } catch (error) {
+        console.error(error); // Muestra el error en la consola para facilitar la depuración
+        return res.render('error', { error: 'Error al obtener productos' });
+    }
+});
+
+
+
+// posteo correctamente un carrito desde POSTMAN  -> Funciona
 routerCart.post('/', async (req, res) => {
     try {
         const nuevoCarrito = await cartModel.create(req.body)
@@ -30,7 +47,7 @@ routerCart.post('/', async (req, res) => {
 });
 
 
-//agregar un producto con id al carrito actual
+//agregar un producto con id al carrito actual: -> Funciona
 routerCart.post('/:id', async (req, res) => {
     try {
         // Usar req.params.id para obtener el ID del producto
@@ -41,8 +58,8 @@ routerCart.post('/:id', async (req, res) => {
             });
         }
         
-        // Asegúrate de usar el ID correcto para encontrar el carrito
-        let carritoActual = await cartModel.findById("671306187129263c6caab6c7").populate('juegos.juego');
+        // Asegúrate de usar el ID correcto para encontrar el carrito 
+        let carritoActual = await cartModel.findById("6713d6ce6b5dba2b8e71342f").populate('juegos.juego');
 
         carritoActual.juegos.push(productoAAgregar);
         await carritoActual.save();  // Asegúrate de esperar la promesa aquí
@@ -56,10 +73,9 @@ routerCart.post('/:id', async (req, res) => {
 
 
 //--------------Deteles
-//DELETE api/carts/:cid/products/:pid deberá eliminar del carrito el producto seleccionado.
-routerCart.delete('/carts/:cid/products/:pid', async (req, res) => {
+//DELETE api/carts/:cid/products/:pid deberá eliminar del carrito el producto seleccionado. > Funciona
+routerCart.delete('/:cid/products/:pid', async (req, res) => {
     const { cid, pid } = req.params; // Tomamos los parámetros cid y pid
-
     try {
         // Buscamos el carrito por su ID
         const carritoBuscado = await cartModel.findById(cid);
@@ -69,7 +85,7 @@ routerCart.delete('/carts/:cid/products/:pid', async (req, res) => {
         }
 
         // Filtramos el array de productos para eliminar el producto específico
-        carritoBuscado.products = carritoBuscado.products.filter(product => product._id.toString() !== pid);
+        carritoBuscado.products = carritoBuscado.juegos.filter(juegoABorrar => juegoABorrar._id.toString() !== pid);
 
         // Guardamos los cambios en el carrito
         await carritoBuscado.save();
@@ -83,17 +99,9 @@ routerCart.delete('/carts/:cid/products/:pid', async (req, res) => {
 
 
 
-
-
-
-
 //DELETE api/carts/:cid deberá eliminar todos los productos del carrito 
 
-//DELETE api/carts/:cid deberá eliminar todos los productos del carrito 
-
-//DELETE api/carts/:cid deberá eliminar todos los productos del carrito 
-
-routerCart.delete('/cart/:cid', async (req, res) => {
+routerCart.delete('/:cid', async (req, res) => {
     const { cid } = req.params; // Obtener el ID del carrito de los parámetros
     try {
         const carritoBuscado = await cartModel.findById(cid);

@@ -1,31 +1,33 @@
 {{#if isValid}}
+  <div class="container mt-4">
+    <h1 class="text-center mb-4">Lista de Juegos</h1>
+    <div class="row">
+      {{#each products}}
+        <div class="col-md-4 mb-3">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">{{this.title}}</h5>
+              <p class="card-text">Precio: ${{this.price}}</p>
+              <a href="products/{{this._id}}" class="btn btn-primary">Ir a Detalles</a>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
 
-<h1>Lista de todos los productos</h1>
-<div class="contenedor-juegosPorPagina">
-<ul>
-    {{#each products}}
-    <li>
-        <h5 class="card-title">{{this.title}}</h5>
-        <p class="card-text">Precio: ${{this.price}}</p>
-        <a href="products/{{this._id}}"> Ir A Detalles </a>
-    </li>
-    {{/each}}
-</ul>
-</div>
-
-
-{{#if hasPrevPage}}
- <div class="contenedor-navegacion"></div>
-<a href={{this.prevLink}}>Anterior</a>
-{{/if}}
-&nbsp;
-{{this.page}}
-&nbsp;
-{{#if hasNextPage}}
-<a href={{this.nextLink}}>Siguiente</a>
- <br>
- </div>
- {{/if}}
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center mt-4">
+      {{#if hasPrevPage}}
+        <a href="{{this.prevLink}}" class="btn btn-secondary mx-2">Anterior</a>
+      {{/if}}
+      <span class="align-self-center mx-3">Página {{this.page}}</span>
+      {{#if hasNextPage}}
+        <a href="{{this.nextLink}}" class="btn btn-secondary mx-2">Siguiente</a>
+      {{/if}}
+    </div>
+  </div>
 {{else}}
-<h1>No hay productos para mostrar</h1>
+  <div class="container text-center mt-4">
+    <h1>No hay productos para mostrar</h1>
+  </div>
 {{/if}}
