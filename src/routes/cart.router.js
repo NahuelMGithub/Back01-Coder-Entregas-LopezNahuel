@@ -2,14 +2,14 @@ import { Router } from "express";
 import productModel from '../models/product.models.js'
 import cartModel from '../models/cart.models.js'
 
+
 const routerCart = Router();
 
 routerCart.get('/', async (req, res) => {
     try {
         // Obtén el carrito y poblalo para incluir los detalles de los productos
-        let carritoActual = await cartModel.findById("671286aec75dd0b07040d5a5").populate('juegos.juego');
-        console.log(carritoActual)
-        // Asegúrate de que los productos se estén pasando correctamente
+        let carritoActual = await cartModel.findById("671306187129263c6caab6c7").populate('juegos.juego');
+        console.log(carritoActual.juegos)
         res.render('cart', { products: carritoActual.juegos });
     } catch (error) {
         console.error(error); // Muestra el error en la consola para facilitar la depuración
@@ -18,40 +18,41 @@ routerCart.get('/', async (req, res) => {
 });
 
 
-
-// posteo correctamente un carrito. 
-// habria que modificarlo, para que: tenga population en ese array
+// posteo correctamente un carrito desde POSTMAN
 routerCart.post('/', async (req, res) => {
     try {
         const nuevoCarrito = await cartModel.create(req.body)
         return res.status(201).json({ message: 'Carrito creado con éxito', carrito: nuevoCarrito });
-        console.log('el Carrito es: ', nuevoCarrito)
-    }
+   }
     catch (error) {
         return res.render('error', { error: 'Error al Crear carrito' });
     }
 });
 
-/*
 
-PUT api/carts/:cid deberá actualizar el carrito con un arreglo de productos con el formato especificado arriba.
-PUT api/carts/:cid/products/:pid deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body
+//agregar un producto con id al carrito actual
+routerCart.post('/:id', async (req, res) => {
+    try {
+        // Usar req.params.id para obtener el ID del producto
+        let productoAAgregar = await productModel.findById(req.params.id);
+        if (!productoAAgregar) {
+            return res.status(404).send({
+                message: 'Producto NO encontrado'
+            });
+        }
+        
+        // Asegúrate de usar el ID correcto para encontrar el carrito
+        let carritoActual = await cartModel.findById("671306187129263c6caab6c7").populate('juegos.juego');
 
-
-Esta vez, para el modelo de Carts, en su propiedad products, el id de cada producto generado dentro del array tiene que hacer referencia al modelo de Products.
- Modificar la ruta /:cid para que al traer todos los productos, los traiga completos mediante un “populate”. De esta manera almacenamos sólo el Id, pero al solicitarlo podemos 
- desglosar los productos asociados.
-
-*/
-
-//--------------------
-
-
-
-//------------------- PUTS
-
-
-
+        carritoActual.juegos.push(productoAAgregar);
+        await carritoActual.save();  // Asegúrate de esperar la promesa aquí
+        
+        res.redirect('/cart') // ni bien termina, me devuelve (en este caso a producs)
+    } catch (error) {
+        console.error(error);  // Registra el error para depuración
+        return res.status(500).render('error', { error: 'Error al crear el carrito' });
+    }
+});
 
 
 //--------------Deteles
@@ -88,29 +89,29 @@ routerCart.delete('/carts/:cid/products/:pid', async (req, res) => {
 
 //DELETE api/carts/:cid deberá eliminar todos los productos del carrito 
 
-routerCart.delete('/carts/:cid', async (req, res) => {
-    const { cid } = req.params; // Obtenemos el parámetro cid
+//DELETE api/carts/:cid deberá eliminar todos los productos del carrito 
 
+//DELETE api/carts/:cid deberá eliminar todos los productos del carrito 
+
+routerCart.delete('/cart/:cid', async (req, res) => {
+    const { cid } = req.params; // Obtener el ID del carrito de los parámetros
     try {
-        // Buscamos el carrito por su ID
         const carritoBuscado = await cartModel.findById(cid);
-
         if (!carritoBuscado) {
             return res.status(404).json({ message: 'Carrito no encontrado' });
         }
 
-        // Limpiamos la lista de juegos en el carrito
-        carritoBuscado.juegos = []; // Simplemente transformo su array a vacio
+        // Eliminar todos los productos del carrito
+        carritoBuscado.juegos = []; // Limpiar el array de juegos
+        await carritoBuscado.save(); // Guardar cambios en la base de datos
 
-        // Guardamos los cambios en el carrito
-        await carritoBuscado.save();
-
-        return res.status(200).json({ message: 'Todos los juegos han sido eliminados del carrito', carrito: carritoBuscado });
+        res.status(200).json({ message: 'Carrito eliminado exitosamente' });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'Error al eliminar los juegos del carrito' });
+        res.status(500).json({ error: 'Error al eliminar el carrito' });
     }
 });
+
 
 
 

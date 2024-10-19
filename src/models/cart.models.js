@@ -13,6 +13,12 @@ const cartSchema = new Schema({
   }
 });
 
+cartSchema.pre('find', function(next) {
+  
+  this.populate('juegos.juego')
+  next();
+})
+
 const cartModel = mongoose.model(cartsCollection, cartSchema); // Definición del modelo con el nombre de la colección y el schema
 
 export default cartModel;

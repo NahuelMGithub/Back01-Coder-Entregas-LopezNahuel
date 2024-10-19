@@ -15,8 +15,15 @@
       </div>
     </div>
   </div>
-      <form action="/products/{{product._id}}?_method=DELETE" method="POST" enctype="application/x-www-form-urlencoded">
-        <input type="hidden" name="_method" value="DELETE">
-        <button type="submit">Eliminar</button>
-    </form>
+  
+  <!-- Formulario para agregar al carrito -->
+<form action="/cart/{{product._id}}" method="POST" enctype="application/x-www-form-urlencoded">
+    <button type="submit">Agregar a carrito</button>
+</form>
+
+  <!-- Formulario para eliminar -->
+  <form action="/products/{{product._id}}?_method=DELETE" method="POST" enctype="application/x-www-form-urlencoded">
+    <input type="hidden" name="_method" value="DELETE">
+    <button type="submit">Eliminar</button>
+  </form>
 </div>

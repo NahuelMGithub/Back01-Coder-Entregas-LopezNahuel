@@ -17,6 +17,7 @@ const uriConexcion = process.env.URI_MONGO
 //Importar los routers routers
 import routerProduct from './routes/products.router.js';
 import routerCart from './routes/cart.router.js';
+import productModel from './models/product.models.js';
 
 const app = express(); 
 app.use(express.urlencoded({ extended: true }));
@@ -27,6 +28,7 @@ app.use(methodOverride('_method'));
 //niciar el motodo de app.engine
 //Configurar el motor de plantillas Handlebars
 app.engine('handlebars', handlebars.engine());
+
 app.set('views',__dirname + '/views');
 app.set('view engine','handlebars');
 // Cargamos la carpeta 'public' como nuestra carpeta de archivos estáticos
@@ -41,13 +43,12 @@ app.listen(PORT, ()=>{
 console.log('uriConexcion es ',uriConexcion)
 // uriConexcion me toma como undifined, por eso lo dejo aca, aunque se que es mala practica
 
+
+
  mongoose.connect('mongodb+srv://nahuel:coder2024@entregafinal.ehdln.mongodb.net/')
     .then(()=>console.log('conectado a BD Atlas'))
     .catch(error=>console.log('error: ', error))
 
-    // al iniciar crea por defecto un carrito. 
-let carritoActual = await cartModel.findById("67128542c57103b888fc9f06")
-    
 
 //---- Routers 
 app.use('/', routerProduct);
@@ -60,4 +61,5 @@ app.get('/newProduct', (req, res)=>{
 
 app.use('/cart', routerCart);
 //app.use('/cart', routerCart);
+
 

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import productModel from '../models/product.models.js'
+import cartModel from '../models/cart.models.js'
 
 
 import { uploader } from '../utilsMulter.js';
@@ -56,6 +57,8 @@ routerProduct.get('/products', async (req, res) => {
     }
 });
 
+
+
 //--------------------- Solicitado por la entrega final: 
 
 routerProduct.get('/statusQuery', async (req, res) => {
@@ -94,6 +97,12 @@ routerProduct.get('/products/:id', async (req, res) => {
         return res.render('error', { error: 'Error al buscar un producto' })
     }
 })
+
+
+//agregar un producto a un carrito
+
+
+
 
 // editar un producto por ID
 routerProduct.put('/products/:id', async (req, res) => {
