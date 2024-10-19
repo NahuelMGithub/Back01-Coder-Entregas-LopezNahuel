@@ -10,17 +10,23 @@
           <p>Precio: {{juego.price}} USD</p>
           <p>Categoría: {{juego.category}}</p>
           <img src="{{juego.thumbnails}}" alt="{{juego.title}}" class="img-fluid">
+          
+          <!-- Campo para mostrar la cantidad -->
+          <p>Cantidad: <span>{{juego.quantity}}</span></p>
+          
+          <!-- Formulario para eliminar un producto específico del carrito -->
+          <form action="/cart/remove/{{juego.id}}" method="POST" enctype="application/x-www-form-urlencoded" class="mt-2">
+            <button class="btn btn-danger" type="submit">Eliminar producto del carrito</button>
+          </form>
         </li>
       {{/each}}
     </ul>
     
     <!-- Formulario para eliminar todos los productos del carrito -->
-<!-- Formulario para eliminar todos los productos del carrito -->
-<form action="/cart/671306187129263c6caab6c7" method="POST" enctype="application/x-www-form-urlencoded">
-  <input type="hidden" name="_method" value="DELETE">
-  <button class="btn btn-danger btn-block" type="submit">Eliminar Carrito</button>
-</form>
-
+    <form action="/cart/671306187129263c6caab6c7" method="POST" enctype="application/x-www-form-urlencoded">
+      <input type="hidden" name="_method" value="DELETE">
+      <button class="btn btn-danger btn-block" type="submit">Eliminar Carrito</button>
+    </form>
 
   {{else}}
     <p class="alert alert-warning text-center">No hay productos en el carrito</p>

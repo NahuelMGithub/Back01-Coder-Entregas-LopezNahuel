@@ -1,3 +1,4 @@
+
 [
   {
     "title": "Catan",
@@ -163,5 +164,117 @@
     "category": "Estrategia",
     "thumbnails": "../img/Scythe.jpg",
     "__v": 0
-  }
+  },
+  
+        {
+          "title": "Wingspan",
+          "description": "Juego de estrategia sobre la observación de aves donde los jugadores crean hábitats para diferentes especies.",
+          "code": "WING123",
+          "price": 70,
+          "status": true,
+          "stock": 5,
+          "category": "Estrategia",
+          "thumbnails": "../img/Wingspan.jpg",
+          "__v": 0
+        },
+        {
+          "title": "Codenames",
+          "description": "Juego de palabras donde los jugadores dan pistas para identificar a sus agentes en un tablero.",
+          "code": "CODE234",
+          "price": 25,
+          "status": true,
+          "stock": 20,
+          "category": "PartyGame",
+          "thumbnails": "../img/Codenames.jpg",
+          "__v": 0
+        },
+        {
+          "title": "Mysterium",
+          "description": "Juego cooperativo de deducción en el que los jugadores deben resolver un asesinato a través de visiones.",
+          "code": "MYS345",
+          "price": 55,
+          "status": true,
+          "stock": 8,
+          "category": "Misterio",
+          "thumbnails": "../img/Mysterium.jpg",
+          "__v": 0
+        },
+        {
+          "title": "Telestrations",
+          "description": "Juego de dibujo y adivinanzas donde los jugadores ilustran y adivinan palabras en un divertido bucle.",
+          "code": "TEL456",
+          "price": 40,
+          "status": true,
+          "stock": 15,
+          "category": "PartyGame",
+          "thumbnails": "../img/Telestrations.jpg",
+          "__v": 0
+        },
+        {
+          "title": "Betrayal at House on the Hill",
+          "description": "Juego de exploración donde los jugadores investigan una mansión y un traidor aparece en medio de la aventura.",
+          "code": "BET567",
+          "price": 70,
+          "status": true,
+          "stock": 4,
+          "category": "Misterio",
+          "thumbnails": "../img/Betrayal.jpg",
+          "__v": 0
+        },
+        {
+          "title": "Splendor",
+          "description": "Juego de estrategia donde los jugadores asumen el papel de comerciantes renacentistas buscando adquirir gemas y desarrollar su influencia.",
+          "code": "SPL678",
+          "price": 40,
+          "status": true,
+          "stock": 12,
+          "category": "Estrategia",
+          "thumbnails": "../img/Splendor.jpg",
+          "__v": 0
+        },
+        {
+          "title": "Catan: Cities & Knights",
+          "description": "Expansión de Catan que agrega nuevos elementos estratégicos y desafíos a la experiencia del juego.",
+          "code": "CAT789",
+          "price": 35,
+          "status": true,
+          "stock": 10,
+          "category": "Estrategia",
+          "thumbnails": "../img/CatanCitiesKnights.jpg",
+          "__v": 0
+        },
+        {
+          "title": "Carcassonne: Hunters & Gatherers",
+          "description": "Una versión del clásico Carcassonne donde los jugadores construyen un paisaje prehistórico.",
+          "code": "CAR890",
+          "price": 30,
+          "status": true,
+          "stock": 9,
+          "category": "EuroGame",
+          "thumbnails": "../img/CarcassonneHunters.jpg",
+          "__v": 0
+        },
+        {
+          "title": "Just One",
+          "description": "Juego cooperativo de palabras donde los jugadores deben adivinar palabras a partir de pistas únicas.",
+          "code": "JO123",
+          "price": 25,
+          "status": true,
+          "stock": 18,
+          "category": "PartyGame",
+          "thumbnails": "../img/JustOne.jpg",
+          "__v": 0
+        },
+        {
+          "title": "Azul: Summer Pavilion",
+          "description": "Expansión de Azul que introduce nuevas mecánicas de colocación de fichas para crear mosaicos aún más desafiantes.",
+          "code": "AZUP234",
+          "price": 50,
+          "status": true,
+          "stock": 6,
+          "category": "Abstracto",
+          "thumbnails": "../img/AzulSummer.jpg",
+          "__v": 0
+        }
+    
 ]

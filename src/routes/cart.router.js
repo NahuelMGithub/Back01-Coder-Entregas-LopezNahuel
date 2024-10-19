@@ -4,11 +4,12 @@ import cartModel from '../models/cart.models.js'
 
 
 const routerCart = Router();
+
 /// Get carrito -> Funciona
 routerCart.get('/', async (req, res) => {
     try {
         // Obtén el carrito y poblalo para incluir los detalles de los productos
-        let carritoActual = await cartModel.findById("6713d6ce6b5dba2b8e71342f").populate('juegos.juego');
+        let carritoActual = await cartModel.findById("67141017d9fe6c80311a31f2").populate('juegos.juego');
         console.log(carritoActual.juegos)
         res.render('cart', { products: carritoActual.juegos });
     } catch (error) {
@@ -34,7 +35,6 @@ routerCart.get('/:cid', async (req, res) => {
 });
 
 
-
 // posteo correctamente un carrito desde POSTMAN  -> Funciona
 routerCart.post('/', async (req, res) => {
     try {
@@ -57,12 +57,21 @@ routerCart.post('/:id', async (req, res) => {
                 message: 'Producto NO encontrado'
             });
         }
-        
-        // Asegúrate de usar el ID correcto para encontrar el carrito 
-        let carritoActual = await cartModel.findById("6713d6ce6b5dba2b8e71342f").populate('juegos.juego');
+        // uso por defecto este unico carrito.        
+        let carritoActual = await cartModel.findById("67141017d9fe6c80311a31f2").populate('juegos.juego');
 
-        carritoActual.juegos.push(productoAAgregar);
-        await carritoActual.save();  // Asegúrate de esperar la promesa aquí
+    // Busca si el producto ya existe en el carrito
+        let productoExistente = carritoActual.juegos.find(j => j._id == productoAAgregar.id);
+
+        if (productoExistente) {
+            // Si el producto ya está en el carrito, aumenta la cantidad
+            productoExistente.quantity += 1; // Aumenta la cantidad (puedes ajustar esto si necesitas un valor específico)
+        } else {
+            // Si el producto no existe, agréguelo al carrito
+            carritoActual.juegos.push({ juego: productoAAgregar._id, quantity: 1 }); // Agrega el producto con cantidad 1
+        }
+        
+        await carritoActual.save();  
         
         res.redirect('/cart') // ni bien termina, me devuelve (en este caso a producs)
     } catch (error) {
@@ -71,11 +80,90 @@ routerCart.post('/:id', async (req, res) => {
     }
 });
 
+//PUT api/carts/:cid deberá actualizar el carrito con un arreglo de productos con el formato especificado arriba.
+routerCart.put('/:cid', async (req, res) => {
+    try {
+        // Obtener el ID del carrito desde los parámetros de la URL
+        let carritoId = req.params.cid;
 
-//--------------Deteles
+        // Obtener el arreglo de juegos a agregar desde el cuerpo de la solicitud
+        let juegosAAgregar = req.body.juegos;
+
+        // Verificar si el carrito existe
+        let carritoAActualizar = await cartModel.findById(carritoId);
+        if (!carritoAActualizar) {
+            return res.status(404).send({
+                message: 'Carrito NO encontrado'
+            });
+        }
+
+        // Iterar sobre los juegos a agregar
+        juegosAAgregar.forEach((nuevoJuego) => {
+            // Buscar si el juego ya existe en el carrito
+            let juegoExistente = carritoAActualizar.juegos.find(j => j.juego.toString() === nuevoJuego.juego);
+
+            if (juegoExistente) {
+                // Si el juego ya está en el carrito, incrementar la cantidad
+                juegoExistente.quantity += nuevoJuego.quantity || 1;
+            } else {
+                // Si el juego no existe, agregarlo al carrito
+                carritoAActualizar.juegos.push({
+                    juego: nuevoJuego.juego, // El ID del juego
+                    quantity: nuevoJuego.quantity || 1 // Asumimos que se agrega 1 si no se especifica cantidad
+                });
+            }
+        });
+
+        // Guardar el carrito actualizado
+        await carritoAActualizar.save();
+
+        // Redireccionar o devolver el carrito actualizado como respuesta JSON
+        res.redirect('/cart');
+        
+    } catch (error) {
+        console.error(error);  // Registra el error para depuración
+        return res.status(500).render('error', { error: 'Error al actualizar el carrito' });
+    }
+});
+
+//PUT api/carts/:cid/products/:pid deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body
+routerCart.put('/:cid/products/:pid', async (req, res) => {
+    try {
+        let nuevaCantidad = req.body.quantity;
+        // Usar req.params.id para obtener el ID del producto
+        let productoAAgregar = await productModel.findById(req.params.pid);
+        if (!productoAAgregar) {
+            return res.status(404).send({
+                message: 'Producto NO encontrado'
+            });
+        }
+                  
+        let carritoActual = await cartModel.findById(req.params.cid).populate('juegos.juego');
+
+    // Busca si el producto ya existe en el carrito
+        let productoExistente = carritoActual.juegos.find(j => j._id == productoAAgregar.id);
+
+        if (productoExistente) {
+            // Si el producto ya está en el carrito, aumenta la cantidad
+            productoExistente.quantity = nuevaCantidad; // Aumenta la cantidad (puedes ajustar esto si necesitas un valor específico)
+        } else {
+            // Si el producto no existe, agréguelo al carrito
+            carritoActual.juegos.push({ juego: productoAAgregar._id, quantity: nuevaCantidad }); // Agrega el producto con cantidad 1
+        }
+        
+        await carritoActual.save();  
+        res.status(200).json({ message: 'Carrito Actualizado exitosamente, nueva cantidad: ', nuevaCantidad });
+     } catch (error) {
+        console.error(error);  // Registra el error para depuración
+        return res.status(500).render('error', { error: 'Error al crear el carrito' });
+    }
+});
+
+
+//--------------Deletes
 //DELETE api/carts/:cid/products/:pid deberá eliminar del carrito el producto seleccionado. > Funciona
 routerCart.delete('/:cid/products/:pid', async (req, res) => {
-    const { cid, pid } = req.params; // Tomamos los parámetros cid y pid
+    const { cid, pid } = req.params; // Aca desestructure req.params
     try {
         // Buscamos el carrito por su ID
         const carritoBuscado = await cartModel.findById(cid);
@@ -110,7 +198,7 @@ routerCart.delete('/:cid', async (req, res) => {
         }
 
         // Eliminar todos los productos del carrito
-        carritoBuscado.juegos = []; // Limpiar el array de juegos
+        carritoBuscado.juegos = []; // Limpiar el array de juegos. Los quantity pasan a desaparecer, asi que no me tengo que preocupar
         await carritoBuscado.save(); // Guardar cambios en la base de datos
 
         res.status(200).json({ message: 'Carrito eliminado exitosamente' });
@@ -119,7 +207,6 @@ routerCart.delete('/:cid', async (req, res) => {
         res.status(500).json({ error: 'Error al eliminar el carrito' });
     }
 });
-
 
 
 

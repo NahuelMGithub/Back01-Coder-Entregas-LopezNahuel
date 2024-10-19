@@ -8,7 +8,8 @@ const cartSchema = new Schema({
   cart_name: { type: String, required: true },
   juegos: {
     type: [{
-    juego: { type: mongoose.Schema.Types.ObjectId, ref: "productos" } // Referencia al modelo "productos"
+    juego: { type: mongoose.Schema.Types.ObjectId, ref: "productos" }, // Referencia al modelo "productos"
+    quantity: { type: Number, required: true, default: 1 } 
   }], default: []
   }
 });
