@@ -9,8 +9,7 @@ const routerCart = Router();
 routerCart.get('/', async (req, res) => {
     try {
         // Obtén el carrito y poblalo para incluir los detalles de los productos
-        let carritoActual = await cartModel.findById("67141017d9fe6c80311a31f2").populate('juegos.juego');
-        console.log(carritoActual.juegos)
+        let carritoActual = await cartModel.findById("67143d5b42312e9cd80efc14").populate('juegos.juego');
         res.render('cart', { products: carritoActual.juegos });
     } catch (error) {
         console.error(error); // Muestra el error en la consola para facilitar la depuración
@@ -58,22 +57,18 @@ routerCart.post('/:id', async (req, res) => {
             });
         }
         // uso por defecto este unico carrito.        
-        let carritoActual = await cartModel.findById("67141017d9fe6c80311a31f2").populate('juegos.juego');
-
+        let carritoActual = await cartModel.findById("67143d5b42312e9cd80efc14").populate('juegos.juego');
     // Busca si el producto ya existe en el carrito
         let productoExistente = carritoActual.juegos.find(j => j._id == productoAAgregar.id);
-
-        if (productoExistente) {
+          if (productoExistente) {
             // Si el producto ya está en el carrito, aumenta la cantidad
             productoExistente.quantity += 1; // Aumenta la cantidad (puedes ajustar esto si necesitas un valor específico)
         } else {
             // Si el producto no existe, agréguelo al carrito
             carritoActual.juegos.push({ juego: productoAAgregar._id, quantity: 1 }); // Agrega el producto con cantidad 1
         }
-        
-        await carritoActual.save();  
-        
-        res.redirect('/cart') // ni bien termina, me devuelve (en este caso a producs)
+                await carritoActual.save();  
+                res.redirect('/cart') // ni bien termina, me devuelve (en este caso a producs)
     } catch (error) {
         console.error(error);  // Registra el error para depuración
         return res.status(500).render('error', { error: 'Error al crear el carrito' });
@@ -85,10 +80,8 @@ routerCart.put('/:cid', async (req, res) => {
     try {
         // Obtener el ID del carrito desde los parámetros de la URL
         let carritoId = req.params.cid;
-
         // Obtener el arreglo de juegos a agregar desde el cuerpo de la solicitud
         let juegosAAgregar = req.body.juegos;
-
         // Verificar si el carrito existe
         let carritoAActualizar = await cartModel.findById(carritoId);
         if (!carritoAActualizar) {
@@ -96,12 +89,10 @@ routerCart.put('/:cid', async (req, res) => {
                 message: 'Carrito NO encontrado'
             });
         }
-
         // Iterar sobre los juegos a agregar
         juegosAAgregar.forEach((nuevoJuego) => {
             // Buscar si el juego ya existe en el carrito
             let juegoExistente = carritoAActualizar.juegos.find(j => j.juego.toString() === nuevoJuego.juego);
-
             if (juegoExistente) {
                 // Si el juego ya está en el carrito, incrementar la cantidad
                 juegoExistente.quantity += nuevoJuego.quantity || 1;
@@ -113,13 +104,11 @@ routerCart.put('/:cid', async (req, res) => {
                 });
             }
         });
-
         // Guardar el carrito actualizado
         await carritoAActualizar.save();
-
         // Redireccionar o devolver el carrito actualizado como respuesta JSON
         res.redirect('/cart');
-        
+       
     } catch (error) {
         console.error(error);  // Registra el error para depuración
         return res.status(500).render('error', { error: 'Error al actualizar el carrito' });
@@ -129,33 +118,36 @@ routerCart.put('/:cid', async (req, res) => {
 //PUT api/carts/:cid/products/:pid deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body
 routerCart.put('/:cid/products/:pid', async (req, res) => {
     try {
+        let {pid} = req.params
         let nuevaCantidad = req.body.quantity;
         // Usar req.params.id para obtener el ID del producto
-        let productoAAgregar = await productModel.findById(req.params.pid);
+        let productoAAgregar = await productModel.findById(pid);
         if (!productoAAgregar) {
             return res.status(404).send({
                 message: 'Producto NO encontrado'
             });
         }
-                  
+                
         let carritoActual = await cartModel.findById(req.params.cid).populate('juegos.juego');
-
-    // Busca si el producto ya existe en el carrito
-        let productoExistente = carritoActual.juegos.find(j => j._id == productoAAgregar.id);
-
+        if (!carritoActual) {
+            return res.status(404).send({
+                message: 'Carrito NO encontrado'
+            });
+        }
+     // Busco si el producto ya existe en el carrito
+        let productoExistente = carritoActual.juegos.find(j => j.juego._id.toString() === pid);
         if (productoExistente) {
             // Si el producto ya está en el carrito, aumenta la cantidad
             productoExistente.quantity = nuevaCantidad; // Aumenta la cantidad (puedes ajustar esto si necesitas un valor específico)
         } else {
-            // Si el producto no existe, agréguelo al carrito
-            carritoActual.juegos.push({ juego: productoAAgregar._id, quantity: nuevaCantidad }); // Agrega el producto con cantidad 1
+            // Si el producto no existe, lo agrego al carrito, con la cantidad dada
+            carritoActual.juegos.push({ juego: productoAAgregar._id, quantity: nuevaCantidad }); // Agrega el producto con cantidad dad
         }
         
         await carritoActual.save();  
         res.status(200).json({ message: 'Carrito Actualizado exitosamente, nueva cantidad: ', nuevaCantidad });
      } catch (error) {
-        console.error(error);  // Registra el error para depuración
-        return res.status(500).render('error', { error: 'Error al crear el carrito' });
+       return res.status(500).render('error', { error: 'Error al crear el carrito' });
     }
 });
 
@@ -167,17 +159,13 @@ routerCart.delete('/:cid/products/:pid', async (req, res) => {
     try {
         // Buscamos el carrito por su ID
         const carritoBuscado = await cartModel.findById(cid);
-        
-        if (!carritoBuscado) {
+                if (!carritoBuscado) {
             return res.status(404).json({ message: 'Carrito no encontrado' });
         }
-
         // Filtramos el array de productos para eliminar el producto específico
         carritoBuscado.products = carritoBuscado.juegos.filter(juegoABorrar => juegoABorrar._id.toString() !== pid);
-
         // Guardamos los cambios en el carrito
         await carritoBuscado.save();
-
         return res.status(200).json({ message: 'Producto eliminado del carrito', carrito: carritoBuscado });
     } catch (error) {
         console.error(error);
@@ -196,8 +184,7 @@ routerCart.delete('/:cid', async (req, res) => {
         if (!carritoBuscado) {
             return res.status(404).json({ message: 'Carrito no encontrado' });
         }
-
-        // Eliminar todos los productos del carrito
+      // Eliminar todos los productos del carrito
         carritoBuscado.juegos = []; // Limpiar el array de juegos. Los quantity pasan a desaparecer, asi que no me tengo que preocupar
         await carritoBuscado.save(); // Guardar cambios en la base de datos
 

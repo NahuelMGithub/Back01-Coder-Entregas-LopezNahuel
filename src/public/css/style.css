@@ -10,6 +10,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    background: linear-gradient(to right, #74ebd5, #acb6e5); /* Gradiente de colores */
 }
 
 

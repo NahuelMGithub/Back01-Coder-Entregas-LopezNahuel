@@ -11,6 +11,7 @@ import __dirname from './utils.js';
 // Import para variable de entorno
 import dotenv from 'dotenv';
 dotenv.config();
+
 const uriConexcion = process.env.URI_MONGO
 
 //Importar los routers routers
@@ -36,17 +37,14 @@ app.listen(PORT, ()=>{
     console.log(`Escuchando en puerto ${PORT}`);
 })
 
-console.log('uriConexcion es ',uriConexcion)
+
 // uriConexcion me toma como undifined, por eso lo dejo aca, aunque se que es mala practica
 
 
- mongoose.connect('mongodb+srv://nahuel:coder2024@entregafinal.ehdln.mongodb.net/')
+ mongoose.connect(uriConexcion)
     .then(()=>console.log('conectado a BD Atlas'))
     .catch(error=>console.log('error: ', error))
 
-    //  esto lo uso, solo para agregar varios una vez, lo podria hacer desde postman tambien
-      
-    
     
 //---- Routers 
 app.use('/', routerProduct);

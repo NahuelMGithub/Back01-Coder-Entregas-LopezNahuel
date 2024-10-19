@@ -4,17 +4,17 @@ import { uploader } from '../utilsMulter.js';
 
 const routerProduct = Router();
 
-//Post para poner mis productos (juegos de mesa)
+//Post para poner mis productos (juegos de mesa). testeado desde web.  Funciona bien
 routerProduct.post('/products', uploader.single('thumbnails'),  async (req, res) => {
     try {
         const nuevoProducto = new productModel(req.body) // aca uso el Schema que cree en productModel
         console.log('el producto es: ', nuevoProducto)
-/*          if (req.file) {
+          if (req.file) {
             nuevoProducto.thumbnails = req.file.path;  
         }
      else {
         console.log('No se subió ningún archivo.');
-    }  */
+    }  
        
            await nuevoProducto.save();
         res.render('product', { product: nuevoProducto.toObject() });
@@ -25,7 +25,7 @@ routerProduct.post('/products', uploader.single('thumbnails'),  async (req, res)
     }
 })
 
-//Obtengo  todos Products y los muestros en paginas segun como  quiero. 
+//Obtengo  todos Products y los muestros en paginas segun como  quiero. Funciona bien, testeado desde web
 routerProduct.get('/products', async (req, res) => {
     try {
         // Obtener los parámetros de la query
@@ -89,7 +89,7 @@ routerProduct.get('/products', async (req, res) => {
     }
 });
 
-// Get statusQuery: Solicitado por la entrega final: 
+// Get statusQuery: Solicitado por la entrega final: Funciona bien, testeado desde web
 routerProduct.get('/statusQuery', async (req, res) => {
     try {
         let page = parseInt(req.query.page);
@@ -112,7 +112,7 @@ routerProduct.get('/statusQuery', async (req, res) => {
     }
 });
 
-// Buscar un producto por ID
+// Buscar un producto por ID:  Funciona bien. Testeado desde web
 routerProduct.get('/products/:id', async (req, res) => {
     try {
         let productoBuscado = await productModel.findById(req.params.id);
@@ -126,7 +126,7 @@ routerProduct.get('/products/:id', async (req, res) => {
     }
 })
 
-// Editar un producto por ID
+// Editar un producto por ID Testeado desde POSTMAN funciona bien
 routerProduct.put('/products/:id', async (req, res) => {
     try {
         let producto = await productModel.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
@@ -143,7 +143,7 @@ routerProduct.put('/products/:id', async (req, res) => {
     }
 })
 
-// Eliminar un producto por ID
+// Eliminar un producto por ID. Funciona bien. Testeado desde web
 routerProduct.delete('/products/:id', async (req, res) => {
     try {
         let producto = await productModel.findByIdAndDelete(req.params.id);
@@ -159,3 +159,4 @@ routerProduct.delete('/products/:id', async (req, res) => {
 
 export default routerProduct;
 
+ 
