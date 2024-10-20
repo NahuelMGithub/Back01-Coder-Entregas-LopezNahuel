@@ -9,7 +9,7 @@ const routerCart = Router();
 routerCart.get('/', async (req, res) => {
     try {
         // Obtén el carrito y poblalo para incluir los detalles de los productos
-        let carritoActual = await cartModel.findById("67143d5b42312e9cd80efc14").populate('juegos.juego');
+        let carritoActual = await cartModel.findById("671500c361b6d5c79fd986bb").populate('juegos.juego');
         res.render('cart', { products: carritoActual.juegos });
     } catch (error) {
         console.error(error); // Muestra el error en la consola para facilitar la depuración
@@ -57,7 +57,7 @@ routerCart.post('/:id', async (req, res) => {
             });
         }
         // uso por defecto este unico carrito.        
-        let carritoActual = await cartModel.findById("67143d5b42312e9cd80efc14").populate('juegos.juego');
+        let carritoActual = await cartModel.findById("671500c361b6d5c79fd986bb").populate('juegos.juego');
     // Busca si el producto ya existe en el carrito
         let productoExistente = carritoActual.juegos.find(j => j._id == productoAAgregar.id);
           if (productoExistente) {
