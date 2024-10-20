@@ -46,7 +46,7 @@ routerCart.post('/', async (req, res) => {
 });
 
 
-//agregar un producto con id al carrito actual: -> Funciona
+//agregar un producto con id al carrito actual: -> Funciona  e
 routerCart.post('/:id', async (req, res) => {
     try {
         // Usar req.params.id para obtener el ID del producto
@@ -75,7 +75,7 @@ routerCart.post('/:id', async (req, res) => {
     }
 });
 
-//PUT api/carts/:cid deberá actualizar el carrito con un arreglo de productos con el formato especificado arriba.
+//PUT api/carts/:cid deberá actualizar el carrito con un arreglo de productos con el formato especificado arriba.  Funciona bien en postman
 routerCart.put('/:cid', async (req, res) => {
     try {
         // Obtener el ID del carrito desde los parámetros de la URL
@@ -89,18 +89,20 @@ routerCart.put('/:cid', async (req, res) => {
                 message: 'Carrito NO encontrado'
             });
         }
+        console.log("El juego a actualizar es ", juegosAAgregar )
         // Iterar sobre los juegos a agregar
         juegosAAgregar.forEach((nuevoJuego) => {
             // Buscar si el juego ya existe en el carrito
-            let juegoExistente = carritoAActualizar.juegos.find(j => j.juego.toString() === nuevoJuego.juego);
+            let juegoExistente = carritoAActualizar.juegos.find(j => j._id.toString() === nuevoJuego._id);
+
             if (juegoExistente) {
                 // Si el juego ya está en el carrito, incrementar la cantidad
-                juegoExistente.quantity += nuevoJuego.quantity || 1;
+                juegoExistente.quantity += nuevoJuego.stock || 1;
             } else {
                 // Si el juego no existe, agregarlo al carrito
                 carritoAActualizar.juegos.push({
-                    juego: nuevoJuego.juego, // El ID del juego
-                    quantity: nuevoJuego.quantity || 1 // Asumimos que se agrega 1 si no se especifica cantidad
+                    juego: nuevoJuego.juego, 
+                    quantity: nuevoJuego.stock || 1 // Asumimos que se agrega 1 si no se especifica cantidad. pero a la cantidad le agrego el stock
                 });
             }
         });
@@ -153,7 +155,7 @@ routerCart.put('/:cid/products/:pid', async (req, res) => {
 
 
 //--------------Deletes
-//DELETE api/carts/:cid/products/:pid deberá eliminar del carrito el producto seleccionado. > Funciona
+//DELETE api/carts/:cid/products/:pid deberá eliminar del carrito el producto seleccionado. > Funciona en postman
 routerCart.delete('/:cid/products/:pid', async (req, res) => {
     const { cid, pid } = req.params; // Aca desestructure req.params
     try {
@@ -162,8 +164,9 @@ routerCart.delete('/:cid/products/:pid', async (req, res) => {
                 if (!carritoBuscado) {
             return res.status(404).json({ message: 'Carrito no encontrado' });
         }
+
         // Filtramos el array de productos para eliminar el producto específico
-        carritoBuscado.products = carritoBuscado.juegos.filter(juegoABorrar => juegoABorrar._id.toString() !== pid);
+        carritoBuscado.juegos = carritoBuscado.juegos.filter(juegoABorrar => juegoABorrar._id.toString() !== pid);
         // Guardamos los cambios en el carrito
         await carritoBuscado.save();
         return res.status(200).json({ message: 'Producto eliminado del carrito', carrito: carritoBuscado });
