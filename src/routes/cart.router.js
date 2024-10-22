@@ -10,12 +10,14 @@ routerCart.get('/', async (req, res) => {
     try {
         // Obtén el carrito y poblalo para incluir los detalles de los productos
         let carritoActual = await cartModel.findById("671500c361b6d5c79fd986bb").populate('juegos.juego');
-        res.render('cart', { products: carritoActual.juegos });
+        res.render('cart', { products: carritoActual.juegos.toObject() });
     } catch (error) {
         console.error(error); // Muestra el error en la consola para facilitar la depuración
         return res.render('error', { error: 'Error al obtener productos' });
     }
 });
+
+
 
 
 /// Get carrito por ID -> Funciona
@@ -26,6 +28,7 @@ routerCart.get('/:cid', async (req, res) => {
         // Obtén el carrito y poblalo para incluir los detalles de los productos
         let   {cid} = req.params;
        let juegos = await cartModel.findById(cid).populate('juegos.juego');
+       
         res.send(juegos)
        } catch (error) {
         console.error(error); // Muestra el error en la consola para facilitar la depuración

@@ -1,0 +1,18 @@
+Comentarios sobre la entrega:
+
+1- Hice la entregra practicamente desde cero, se que no es lo recomendable, pero me sirve para fijar conocimientos
+2- El archivo ".env" lo puse dentro, porque no lo tomaba, probablemente algo mal en mi package.json
+3- Sigue manteniendose la carpeta DATA, pero solo la uso como resguardo de juegos, para hacer post masivos de juegos y que tenga sentido.
+4- Tiene aspecto visual, pero nada del otro mundo. 
+5- Al no usar LocalStorage, simulo un carrito buscandolo por id, respecto del que ya hice. 
+
+
+cosas que NO pude hacer:
+-solucionar problema para subir fotos. Me estaba quedando sin tiempo, y ya que no era prioridad, lo deje sin hacer para esta entrega
+-Ir a detalles, no renderiza dentro del resto. Por algun motivo, el boton para "ir a detalle"  renderiza produts/:pid, pero sin tomar css.
+-carts NO me muestra el contenido: No muestra los datos y los botones de borrar tampoco funcionan (en la web), desde postman si.  
+
+Sobre este último problema, de renderizar Carts tengo este cartel:
+Handlebars: Access has been denied to resolve the property "juego" because it is not an "own property" of its parent.
+You can add a runtime option to disable the check or this warning:
+See https://handlebarsjs.com/api-reference/runtime-options.html#options-to-control-prototype-access for details      
